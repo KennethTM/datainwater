@@ -1,7 +1,7 @@
 ---
 authors:
 - admin
-bio: My research interests freshwater carbon cycling and everything data.
+bio: My research interests are freshwater carbon cycling and everything data.
 education:
   courses:
   - course: Msc in Biology
@@ -13,9 +13,9 @@ education:
 email: "kenneth.martinsen@bio.ku.dk"
 interests:
 - Freshwater carbon cycling
-- Spatial data
+- Spatial data and GIS
 - Statistics and machine learning
-- R, Python, GIS in many shapes, Linux...
+- R, Python, Linux, open-source software...
 name: Kenneth Thorø Martinsen
 organizations:
 - name: University of Copenhagen, Freshwater Biology Section
@@ -37,6 +37,6 @@ user_groups:
 - Visitors
 ---
 
-Biologist interested in everything data and computing. Professional interest in carbon cycling in freshwaters, especially greenhouse gas fluxes.
+Biologist interested in everything data and computing. Professional interest in carbon cycling in freshwaters, especially greenhouse gas fluxes and large scale carbon budgets.
 
 This personal webpage is an outlet for posts about cool data science stuff and ongoing/previous projects. Everything is likely to have something to do with water and very likely some kind of *shallow water*!
