@@ -1,0 +1,50 @@
+---
+date: "2020-02-25T00:00:00Z"
+external_link: ""
+image: 
+  caption: Photo by Emil Kristensen
+  focal_point: Smart
+links:
+slides: 
+summary: Investigaing the causes of sudden fish death in Lake Filsø, Denmark. 
+tags:
+- Fish death
+- hydrology
+- climate change
+- natural tracers
+- PARAFAC
+title: Fish death in Lake Filsø
+url_code: ""
+url_pdf: ""
+url_slides: ""
+url_video: ""
+---
+
+## Sudden death of 80 tonnes fish  
+
+During the summer 2018 all fish in the southern part Filsø died suddenly ([DR news in danish](https://www.dr.dk/nyheder/indland/hvorfor-er-80-tons-fisk-i-jyllands-naeststoerste-soe-doede)). The event occurred after a long period of drought followed by a sudden rain event. This caused a high inflow of water, and along with it, a large pulse of organic matter which rapidly increased respiration rates within the lake and caused anoxia within few days.
+
+### Indentifying the sources and management actions
+
+In this project we investigate the causes of the fish kill. We examine the ability of many natural tracers to identify sources of easily degradable organic matter and water with high oxygen consumption. We have established stations where we measure water flow throughout the catchment and collect water samples several times a year. This way we can track and trace inputs of water solutes to the lake. 
+
+### Fingerprinting water
+
+We measure a large suite of natural tracers. For example, we measure dissolved organic matter flourescence. By exposing the water sample to light and measuring the response at many wavelengths we obtain a Excitation-Emission-Matrix (EEM). This shape of the resulting 3D surface depends on the different flourescent compounds and their abundance in the water sample. By collecting many EEM's, the flourescent compounds and their concentration can be determined using Parallel-Factor-Analysis (PARAFAC). 
+
+Explore an EMM measured as part of this project below:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(plotly)
+
+eem <- readRDS("eem_single.rds")
+
+surface_plot <- plot_ly(x = eem$ex, y = eem$em, z = eem$x) %>% 
+  add_surface() %>% 
+  layout(scene = list(xaxis = list(title = "Excitation wavelength (nm)"),
+                      yaxis = list(title = "Emission wavelength (nm)"),
+                      zaxis = list(title = "Intensity (R.U)")))
+
+surface_plot
+```
