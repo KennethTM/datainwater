@@ -37,6 +37,6 @@ user_groups:
 - Visitors
 ---
 
-Biologist interested in everything data and computing. Professional interest in carbon cycling in freshwaters, especially greenhouse gas fluxes and large scale carbon budgets.
+Biologist interested in everything **data, water and computing**. Professional interest in carbon cycling in freshwaters, especially greenhouse gas fluxes and large scale carbon budgets.
 
 This personal webpage is an outlet for posts about cool data science stuff and ongoing/previous projects. Everything is likely to have something to do with water and very likely some kind of *shallow water*!

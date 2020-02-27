@@ -20,17 +20,17 @@ url_slides: ""
 url_video: ""
 ---
 
-## Sudden death of 80 tonnes fish  
+### Death of 80 tonnes fish  
 
-During the summer 2018 all fish in the southern part Filsø died suddenly ([DR news in danish](https://www.dr.dk/nyheder/indland/hvorfor-er-80-tons-fisk-i-jyllands-naeststoerste-soe-doede)). The event occurred after a long period of drought followed by a sudden rain event. This caused a high inflow of water, and along with it, a large pulse of organic matter which rapidly increased respiration rates within the lake and caused anoxia within few days.
+During the summer 2018 all fish in the southern part Filsø died suddenly ([DR news in danish](https://www.dr.dk/nyheder/indland/hvorfor-er-80-tons-fisk-i-jyllands-naeststoerste-soe-doede)). The event occurred after a long period of drought followed by a sudden rain event. This caused a high inflow of water, and along with it, a large pulse of organic matter which rapidly increased respiration rates within the lake and caused anoxia within few days. 
 
 ### Indentifying the sources and management actions
 
-In this project we investigate the causes of the fish kill. We examine the ability of many natural tracers to identify sources of easily degradable organic matter and water with high oxygen consumption. We have established stations where we measure water flow throughout the catchment and collect water samples several times a year. This way we can track and trace inputs of water solutes to the lake. 
+In this project we investigate the causes of the fish kill. We examine the ability of many natural tracers to identify sources of easily degradable organic matter and water with high oxygen consumption. We have established multiple stations in the cathcment where we measure water flow and collect water samples several times a year. This way we can track and trace inputs of water solutes to the lake. 
 
 ### Fingerprinting water
 
-We measure a large suite of natural tracers. For example, we measure dissolved organic matter flourescence. By exposing the water sample to light and measuring the response at many wavelengths we obtain a Excitation-Emission-Matrix (EEM). This shape of the resulting 3D surface depends on the different flourescent compounds and their abundance in the water sample. By collecting many EEM's, the flourescent compounds and their concentration can be determined using Parallel-Factor-Analysis (PARAFAC). 
+We measure a large suite of natural tracers. For example, we measure dissolved organic matter flourescence. By exposing the water sample to light and measuring the response at many wavelengths we obtain an Excitation-Emission-Matrix (EEM). This shape of the resulting 3D surface depends on the different organic flourescent compounds and their concentration in the water sample. By stacking many EEM's, the flourescent compounds and their concentration can be determined using Parallel-Factor-Analysis (PARAFAC). 
 
 Explore an EMM measured as part of this project below:
 
