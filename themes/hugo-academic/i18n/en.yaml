@@ -172,6 +172,9 @@
 - id: pub_patent
   translation: Patent
 
+- id: pub_publicscience
+  translation: Public science article (in danish)
+
 # Project details
 
 - id: open_project_site
