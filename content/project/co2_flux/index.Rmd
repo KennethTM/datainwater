@@ -9,9 +9,10 @@ slides:
 summary: Developing an automatic floating chamber for carbon dioxide flux measurements
 tags:
 - carbon dioxide
-- greenhouse gases
 - climate change
 - small lakes
+- COWIfonden
+- R
 title: New method for measuring carbon dioxide flux
 url_code: ""
 url_pdf: ""
@@ -27,7 +28,7 @@ The CO~2~ flux can be measured using floating chambers. This is an inverted buck
 
 ### Building an automatic floating chamber
 
-Even if the CO~2~ concentration within the chamber are now easy to measure, the method still require manual labor. Flux measurements are performed over short time spans (from minutes to an hour), requiring manual lifting of the chamber in order to reset the chamber. To avoid this, and at the same time enabling us to do continous measurements automatically, I have developed an automatic solution. This solution uses a timer and small air-pump which regularly flushes the chamber headspace with atmospheric air. We reported on this method in an  ([Biogeosciences](https://www.biogeosciences.net/15/5565/2018/)).  
+Even if the CO~2~ concentration within the chamber are now easy to measure, the method still require manual labor. Flux measurements are performed over short time spans (from minutes to an hour), requiring manual lifting of the chamber in order to reset the chamber. To avoid this, and at the same time enabling us to do continous measurements automatically, I have developed an automatic solution. This solution uses a timer and small air-pump which regularly flushes the chamber headspace with atmospheric air. We reported on this method in  [Biogeosciences](https://www.biogeosciences.net/15/5565/2018/).  
 
 The new automatic floating chamber has been central for later investigations of CO~2~ fluxes in small lakes:  
 
@@ -35,4 +36,4 @@ The new automatic floating chamber has been central for later investigations of 
 * [Carbon dioxide fluxes of air-exposed sediments and desiccating ponds](https://link.springer.com/article/10.1007/s10533-019-00579-0)  
 * [Danish popular science articles: Bedre og billigere teknologi til studier af klimagasser](http://www.vand-og-jord.dk/vj218.htm)  
 
-This project was funded by [COWIFonden]()
+This project was funded by [COWIfonden](https://www.cowifonden.com/donations/recent-projects/donations-2017).

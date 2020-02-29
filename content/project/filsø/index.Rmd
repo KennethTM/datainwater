@@ -8,11 +8,15 @@ links:
 slides: 
 summary: Investigaing the causes of sudden fish death in Lake Filsø, Denmark. 
 tags:
-- Fish death
+- fish death
 - hydrology
 - climate change
 - natural tracers
 - PARAFAC
+- Aage V. Jensen naturfond
+- GIS
+- R
+- Python
 title: Fish death in Lake Filsø
 url_code: ""
 url_pdf: ""
@@ -48,3 +52,5 @@ surface_plot <- plot_ly(x = eem$ex, y = eem$em, z = eem$x) %>%
 
 surface_plot
 ```
+
+The project is funded by [Aage V. Jensen Naturfond](http://www.avjf.dk/avjnf/naturomraader/filsoe/).
