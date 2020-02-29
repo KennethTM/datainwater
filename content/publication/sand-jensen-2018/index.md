@@ -7,7 +7,7 @@ publication_types: ["2"]
 abstract: ""
 featured: false
 publication: "*Aquatic Botany*"
-url_pdf: "https://doi.org/10.1016%2Fj.aquabot.2018.05.005"
+url_pdf: ""
 doi: "10.1016/j.aquabot.2018.05.005"
 ---
 

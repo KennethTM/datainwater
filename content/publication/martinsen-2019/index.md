@@ -5,9 +5,9 @@ publishDate: 2020-02-29T11:59:52.249602Z
 authors: ["Kenneth Thorø Martinsen", "Theis Kragh", "Kaj Sand-Jensen"]
 publication_types: ["2"]
 abstract: ""
-featured: false
+featured: true
 publication: "*Aquatic Sciences*"
-url_pdf: "https://doi.org/10.1007%2Fs00027-019-0682-8"
+url_pdf: ""
 doi: "10.1007/s00027-019-0682-8"
 ---
 

@@ -7,7 +7,7 @@ publication_types: ["2"]
 abstract: ""
 featured: false
 publication: "*Ecological Engineering*"
-url_pdf: "https://doi.org/10.1016%2Fj.ecoleng.2018.03.005"
+url_pdf: ""
 doi: "10.1016/j.ecoleng.2018.03.005"
 ---
 
