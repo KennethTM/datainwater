@@ -1,7 +1,7 @@
 ---
 title: "Shallow plant-dominated lakes – extreme environmental variability, carbon cycling and ecological species challenges"
 date: 2019-06-01
-publishDate: 2020-02-29T11:59:52.250245Z
+publishDate: 2020-02-25T11:59:52.250245Z
 authors: ["Kaj Sand-Jensen", "Mikkel René Andersen", "Kenneth Thorø Martinsen", "Jens Borum", "Emil Kristensen", "Theis Kragh"]
 publication_types: ["2"]
 abstract: ""
