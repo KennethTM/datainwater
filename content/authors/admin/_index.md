@@ -4,7 +4,7 @@ authors:
 bio: My research interests are freshwater carbon cycling and everything data.
 education:
   courses:
-  - course: Msc in Biology
+  - course: MSc in Biology
     institution: University of Copenhagen
     year: 2016
   - course: BSc in Biology
@@ -37,6 +37,6 @@ user_groups:
 - Visitors
 ---
 
-Biologist interested in everything **data, water and computing**. Professional interest in carbon cycling in freshwaters, especially greenhouse gas fluxes and large scale carbon budgets.
+Biologist interested in everything **data, water and computing**. Research interest in freshwater carbon cycling, especially greenhouse gas fluxes and large scale carbon budgets.
 
-This personal webpage is an outlet for posts about cool data science stuff and ongoing/previous projects. Everything is likely to have something to do with water and very likely some kind of *shallow water*!
+This webpage is my outlet for posts about cool data science stuff and ongoing/previous projects. Everything is very likely to have something to do with data and water!
