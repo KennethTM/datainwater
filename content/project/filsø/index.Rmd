@@ -26,7 +26,7 @@ url_video: ""
 
 ### Death of 80 tonnes fish  
 
-During the summer 2018 all fish in the southern part Filsø died suddenly ([DR news in danish](https://www.dr.dk/nyheder/indland/hvorfor-er-80-tons-fisk-i-jyllands-naeststoerste-soe-doede)). The event occurred after a long period of drought followed by a sudden rain event. This caused a high inflow of water, and along with it, a large pulse of organic matter which rapidly increased respiration rates within the lake and caused anoxia within few days. 
+During the summer 2018 all fish in the southern part Filsø died suddenly ([DR news](https://www.dr.dk/nyheder/indland/hvorfor-er-80-tons-fisk-i-jyllands-naeststoerste-soe-doede)). The event occurred after a long period of drought followed by a sudden rain event. This caused a high inflow of water, and along with it, a large pulse of organic matter which rapidly increased respiration rates within the lake and caused anoxia within few days. 
 
 ### Indentifying the sources and management actions
 
