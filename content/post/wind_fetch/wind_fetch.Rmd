@@ -1,0 +1,81 @@
+---
+title: Determining waterbody wind fetch using Python
+author: Kenneth
+date: '2020-04-08'
+categories:
+  - GIS
+  - Python
+tags:
+  - lakes
+  - wind fetch
+  - open source software
+slug: wind_fetch
+lastmod: '2020-04-08T11:55:27+01:00'
+featured: no
+draft: true
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+---
+
+### Wind, fetch and waves
+
+Wind traveling across water surfaces create waves. Wave action depend on several parameters including fetch which is the unobstructed length which the wind can travel across a water surface from a given direction. Areas with high wind fetch are often exposed areas but this also depends on the primary wind direction. By calculating wind fetch, we can quantify exposure of different areas and shorelines in waterbodies. To my work, wind fetch is interesting from a physical perspective because it drives air-water gas exchange. However, it may also be interesting from a ecological viewpoint as wave exposure affect species distribution of submerged aquatic plants for example.
+
+To calculate fetch, I have used the [waver R-package](https://github.com/pmarchand1/waver) which require a point and polygon for the calculation. However, I did not find a suitable tool when dealing with lake rasters where I wanted fetch for each raster cell. For this kind of application, vectorizing a raster to points, calculating fetch and rasterizing the points back to a raster was slow. Tools for this exist for [ArcGIS](https://umesc.usgs.gov/management/dss/wind_fetch_wave_models_2012update.html) which I did not feel like bothering with. In the end I decided it to use the opportunity to do some work in Python and created a useful and extendable interface along with a command-line tool.
+
+It is available on [Github](https://github.com/KennethTM/WindFetch). A script with the class, methods and functions doing the work, a script for testing and a command-line tool.
+
+### The program
+
+
+
+### Usage
+
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
+
+```
+
+
+```{bash, eval=FALSE, echo=TRUE}
+#Wind fetch from the four N, S, E and W
+python waterbody_cli.py -i 'gurre_lake.tif' -o 'gurre_lake_fetch.tif' -id 1 -d '0,90,180,270'
+
+#Summary of wind fetch from N, S, E and W
+python waterbody_cli.py -i 'gurre_lake.tif' -o 'gurre_lake_fetch_summary.tif' -id 1 -d '0,90,180,270' -s 'min,mean,max'
+
+#Summary of weighted wind fetch from N, S, E and W
+python waterbody_cli.py -i 'gurre_lake.tif' -o 'gurre_lake_fetch_weighted_summary.tif' -id 1 -d '0,90,180,270' -w '0.9,1.1,1.35,0.75' -s 'min,mean,max'
+```
+
+
+```{r}
+library(raster);library(leaflet)
+
+fetch <- stack("gurre_lake_fetch.tif")
+names(fetch) <- as.character(paste0("Degree_", seq(0, 315, 45)))
+
+
+
+pal <- colorNumeric(palette = "inferno", values(fetch[["Degree_135"]]),
+  na.color = "transparent")
+
+leaflet() %>% 
+  addTiles() %>%
+  addRasterImage(fetch[["Degree_45"]], colors = pal, opacity = 0.5, group = "45") %>%
+  addRasterImage(fetch[["Degree_135"]], colors = pal, opacity = 0.5, group = "135") %>%
+  addRasterImage(fetch[["Degree_225"]], colors = pal, opacity = 0.5, group = "225") %>%
+  addRasterImage(fetch[["Degree_315"]], colors = pal, opacity = 0.5, group = "315") %>%
+  addLegend(pal = pal, values = values(fetch[["Degree_135"]]),
+    title = "Fetch (m)", opacity = 1) %>% 
+  addLayersControl(
+    overlayGroups = c("45", "135", "225", "315"),
+    options = layersControlOptions(collapsed = FALSE),
+    position = "topleft"
+  )
+```
+
+
+### Future of WindFetch
+
