@@ -9,4 +9,3 @@ featured: false
 url_pdf: "http://www.vand-og-jord.dk/artikler/vj417-temperaturdynamik.pdf"
 publication: "*Vand & Jord*"
 ---
-

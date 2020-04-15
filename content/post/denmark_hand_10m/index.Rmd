@@ -1,0 +1,261 @@
+---
+title: Height above nearest drainage map for Denmark
+author: Kenneth
+date: '2020-03-24'
+categories:
+  - GIS
+  - Python
+tags:
+  - hydrology
+  - climate change
+  - digital elevation model
+slug: hand_dk
+lastmod: '2020-02-20T11:55:27+01:00'
+featured: no
+image: 
+  caption: ''
+  placement: ''
+  focal_point: ''
+  preview_only: yes
+---
+
+### Rain, rain and more rain
+
+2019 was a very wet year in Denmark and especially September and October were very rainy ([DR news](https://www.dr.dk/nyheder/indland/dmi-ingen-regnrekord-i-2019)). The year ended with 905.2 mm which tied the previous record from 1999. The normal amount is around 700 mm. It continued to rain in 2020 with February and already on February 23 the previous record was surpassed ([DR news](https://www.dr.dk/nyheder/indland/februar-saetter-rekord-aldrig-foer-har-vi-faaet-saa-meget-regn)). The extreme amount of water caused flooding in several parts of Denmark.
+
+### Are extremes the new normal?
+
+Forecasts and climate models suggests that this might be the new norm and that we should plan accordingly. Extremes will likely be more common meaning we should get used to periods with drought or heavy rain. This makes identifying lowland areas which are susceptible to flooding an important priority.
+
+### Height above nearest drainage
+
+In this post I will calculate height above nearest drainage (HAND) for Denmark. This is a simple terrain metric which can be calculated from a digital elevation model and a stream network. For all cells in a grid, it is the vertical distance to the nearest stream. Here, I use a digital terrain model with a 10 m resolution and a stream network vector layer ([Download Danish geo data](https://download.kortforsyningen.dk/)). The computations are performed using the open source software [TauDEM](http://hydrology.usu.edu/taudem/taudem5/index.html) and vector/raster manipulations using [GDAL/OGR](https://gdal.org/).
+
+### From digital elevation model to HAND map
+
+While the TauDEM software use command line programs, the procedure has been scripted in Python. This makes stuff easier and also gives access to some other libraries for raster calculations like Rasterio. The first part loads some libraries, defines paths and retrieves some raster metadata from the elevation model.
+
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
+import subprocess
+import os
+import rasterio
+
+#path to gdal command line programs
+path_gdal = "C:/Program Files/GDAL/"
+
+#taudem mpi settings to enable parallel computations
+mpi_settings = ["mpiexec", "-n", "10"]
+
+#set work dir path
+work_dir = "C:/"
+
+#rawdata dir path
+rawdata_dir = work_dir+"rawdata/"
+
+dem = rawdata_dir+"dk_dtm_10m{}.tif"
+stream_raw = rawdata_dir+"dk_watercourse.gml"
+stream = rawdata_dir+"stream"
+
+#get extent and epsg code of dem
+with rasterio.open(dem.format("")) as ds:
+    dem_bb = ds.bounds
+    dem_res = ds.res
+    dem_meta = ds.profile
+```
+
+Next, I prepare the stream vector file. While this vector file is not necessary, as streams can be delineated from flow accumulation, we use the stream network in preprocessing of the elevation model. Furthermore, we use it to derive a more realistic stream network which is consistent with the calculated flow directions. The initial stream vector file is converted to a .sqlite file with Spatialite enabled. This way, we can use spatial functions in our SQL queries and obtain start/end point of streams. These points are used when delineating the new stream network. Both the stream network and start/end points are rasterized to the resolution and extent of elevation model.
+
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
+#prepare stream vector file: reproject and make 2 dimensional, save as .sqlite file
+subprocess.call(["ogr2ogr",
+                 "-f", "SQLite",
+                 "-dim", "2",
+                 "-select", "geometry",
+                 "-dsco", "SPATIALITE=YES",
+                 "-t_srs", dem_meta["crs"].to_proj4(),
+                 stream+".sqlite",
+                 stream_raw])
+
+#get stream start and end points
+subprocess.call(["ogr2ogr",
+                 "-f", "SQLite",
+                 "-sql", "SELECT ST_STARTPOINT(geometry) AS geom FROM watercourse",
+                 stream+"_points.sqlite",
+                 stream+".sqlite"])
+
+subprocess.call(["ogr2ogr",
+                 "-f", "SQLite",
+                 "-append",
+                 "-update",
+                 "-sql", "SELECT ST_ENDPOINT(geometry) AS geom FROM watercourse",
+                 stream+"_points.sqlite",
+                 stream+".sqlite"])
+
+#rasterize streams to match dem
+subprocess.call(" ".join(["gdal_rasterize",
+                "-burn", "1",
+                "-co", "COMPRESS=LZW",
+                "-init", "0",
+                "-tap",
+                "-ot", "Byte",
+                "-te", " ".join([str(i) for i in list(dem_bb)]),
+                "-tr", str(dem_res[0]) + " " + str(dem_res[1]),
+                stream+".sqlite",
+                stream+".tif"]))
+
+#rasterize streams points to match dem
+subprocess.call(" ".join(["gdal_rasterize",
+                "-burn", "1",
+                "-co", "COMPRESS=LZW",
+                "-init", "0",
+                "-tap",
+                "-ot", "Byte",
+                "-te", " ".join([str(i) for i in list(dem_bb)]),
+                "-tr", str(dem_res[0]) + " " + str(dem_res[1]),
+                stream+"_points.sqlite",
+                stream+"_points.tif"]))
+```
+
+Next is the preprocessing of the elevation model. The process results in a conditioned elevation model, where roads, bridges and other artifacts which intersect the stream network are [breached through](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019WR024837). Thereby, I use the information present in the stream network to make the elevation model suitable for hydrological analysis in a realistic manner. The alternative is to just fill the sinks as the only preprocessing step.
+
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
+#burn streams into dem
+subprocess.call(["python", path_gdal+"gdal_calc.py",
+                 "-A", dem.format(""),
+                 "-B", stream+".tif",
+                 "--outfile="+dem.format("_burn"),
+                 "--calc=(A-(B*100))",
+                 "--NoDataValue=-9999",
+                 "--overwrite",
+                 "--co=COMPRESS=LZW"])
+
+#fill pits
+subprocess.call(mpi_settings+["pitremove", 
+                "-z", dem.format("_burn"),
+                "-fel", dem.format("_fel")])
+
+#determine flow dirs
+subprocess.call(mpi_settings+["d8flowdir",
+                "-fel", dem.format("_fel"),
+                "-p", dem.format("_p"),
+                "-sd8", dem.format("_sd8")])
+
+#mask flow dirs by streams
+subprocess.call(["python", path_gdal+"gdal_calc.py",
+                 "-A", stream+".tif",
+                 "-B", dem.format("_p"),
+                 "--outfile="+dem.format("_pm"),
+                 "--calc=A*B",
+                 "--NoDataValue=0", 
+                 "--type=Int16",
+                 "--overwrite",
+                 "--co=COMPRESS=LZW"])
+
+#condition dem
+subprocess.call(mpi_settings+["flowdircond",
+                "-z", dem.format(""),
+                "-p", dem.format("_pm"),
+                "-zfdc", dem.format("_cond")])
+                
+#edit nodata values
+subprocess.call(["python", path_gdal+"gdal_edit.py",
+                 "-a_nodata", "-9999", 
+                 dem.format("_cond")])
+```
+
+Using the conditioned elevation model we adopt the traditional steps of filling any remaining pits, calculating flow directions and delineating a stream network using the start/end points as weights. This stream network is close to the observed stream network I downloaded, with the difference that this is consistent with flow directions obtained from the digital elevation model.
+
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
+#remove pits on conditioned dem
+subprocess.call(mpi_settings+["pitremove", 
+                "-z", dem.format("_cond"),
+                "-fel", dem.format("_condfel")])
+
+#determine flow dirs on conditioned dem
+subprocess.call(mpi_settings+["d8flowdir",
+                "-fel", dem.format("_condfel"),
+                "-p", dem.format("_condp"),
+                "-sd8", dem.format("_condsd8")])
+
+#flow accumulation on conditioned dem
+subprocess.call(mpi_settings+["aread8", 
+                "-p", dem.format("_condp"),
+                "-ad8", dem.format("_condad8")])
+
+#flow accumulation weighted by stream start and end points
+subprocess.call(mpi_settings+["aread8", 
+                "-p", dem.format("_condp"),
+                "-ad8", dem.format("_condssa"),
+                "-wg", stream+"_points.tif"])
+
+#delineate streams by threshold
+subprocess.call(mpi_settings+["threshold", 
+                "-ssa", dem.format("_condssa"),
+                "-src", dem.format("_condsrc"),
+                "-thresh", "1"])
+```
+
+Finally, we calculate D-Inf flow directions and HAND. The result is a grid where each cell denote the vertical height above the nearest stream, with "nearest" being the nearest stream cell in along the D-Inf flowpath. In the final step, we use some raster math to assign zero to the coastal area for which HAND has not been calculated.
+
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
+#calculate infinity flow directions
+subprocess.call(mpi_settings+["dinfflowdir",
+                    "-fel", dem.format("_condfel"),
+                    "-slp", dem.format("_condslp"),
+                    "-ang", dem.format("_condang")])
+                    
+#calculate HAND raster
+subprocess.call(mpi_settings+["dinfdistdown",
+                    "-fel", dem.format("_condfel"),
+                    "-slp", dem.format("_condslp"),
+                    "-ang", dem.format("_condang"),
+                    "-src", dem.format("_condsrc"),
+                    "-dd", dem.format("_condhand"),
+                    "-m",  "v",  "ave"])
+
+#fill HAND raster with zero on land surfaces where HAND is nodata
+with rasterio.open(dem.format("_condhand")) as grid:
+    handgrid = grid.read()
+    handmeta = grid.profile
+
+with rasterio.open(dem.format("")) as grid:
+    demgrid = grid.read()
+    demmeta = grid.profile
+
+handgrid[handgrid < 0] = 0
+handgrid[demgrid == -9999] = -1
+
+handmeta["nodata"] = -1
+     
+with rasterio.open(dem.format("_condhandzeros"), "w", **handmeta) as dst:
+    dst.write(handgrid)
+```
+
+And of course a plot of the result in a downsampled version, where the values also have been binned. The original raster in 10 m resolution is available upon request.
+
+```{r, echo=FALSE, eval=FALSE}
+#load data, plot and save to .png file
+library(raster);library(tidyverse)
+raster_hand <- raster("dk_dtm_10m_condhandzeros_100m.tif")
+
+raster_hand_df <- raster_hand %>% 
+  as.data.frame(xy = TRUE, na.rm = TRUE) %>% 
+  set_names(c("x", "y", "z")) %>% 
+  mutate(bins = cut(z, breaks = c(0, 2.5, 5, 10, 20, 150), include.lowest = TRUE))
+
+raster_hand_fig <- raster_hand_df %>% 
+  ggplot(aes(x, y, fill = factor(bins)))+
+  geom_raster()+
+  scale_fill_brewer(palette = "BuPu", direction = -1, name = "HAND (m)")+
+  theme_void()+
+  theme(legend.position = c(0.8, 0.8))
+
+#move to /static/img/
+ggsave("dk_hand.png", raster_hand_fig, height = 150, width = 130, units = "mm")
+```
+
+![](/img/dk_hand.png)  
+
+### Final thoughts
+
+Calculation of terrain indices like HAND could improve mapping of flood prone areas. It has also been suggested to map flood extent using a combination of HAND and rating curve measurements at stream gauges. However, HAND is not only interesting for flood mapping purposes. It is also measure of terrain-stream hydrological connectivity which is interesting for carbon cycling and transport in freshwater environments.

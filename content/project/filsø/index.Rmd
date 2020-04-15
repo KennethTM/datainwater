@@ -1,8 +1,8 @@
 ---
-date: "2020-02-25T00:00:00Z"
+date: "2020-02-25"
 external_link: ""
 image: 
-  caption: Photo by Emil Kristensen
+  caption: Dead fish in Lake Filsø, photo by Emil Kristensen
   focal_point: Smart
 links:
 slides: 
@@ -14,9 +14,6 @@ tags:
 - natural tracers
 - PARAFAC
 - Aage V. Jensen naturfond
-- GIS
-- R
-- Python
 title: Fish death in Lake Filsø
 url_code: ""
 url_pdf: ""

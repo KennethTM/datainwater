@@ -1,0 +1,112 @@
+---
+title: Calculate wind fetch on lakes using Python
+author: Kenneth
+date: '2020-04-08'
+categories:
+  - GIS
+  - Python
+tags:
+  - lakes
+  - wind fetch
+  - open source software
+slug: wind_fetch
+lastmod: '2020-04-08T11:55:27+01:00'
+featured: no
+image: 
+  caption: ''
+  placement: ''
+  focal_point: ''
+  preview_only: yes
+---
+
+### Wind, fetch and waves
+
+Wind traveling across water surfaces create waves. Wave action depend on several parameters including fetch which is the unobstructed length which the wind can travel across a water surface from a given direction. Areas with high wind fetch are often exposed areas but this also depends on the primary wind direction. By calculating wind fetch, we can quantify exposure of different areas and shorelines in waterbodies. To my work, wind fetch is interesting from a physical perspective because it drives air-water gas exchange. However, it may also be interesting from a ecological viewpoint as wave exposure affect species distribution of submerged aquatic plants for example.
+
+To calculate fetch, I have used the [waver R-package](https://github.com/pmarchand1/waver) which require a point and polygon for the calculation. However, I did not find a suitable tool when dealing with lake rasters where I wanted fetch for each raster cell. For this kind of application, vectorizing a raster to points, calculating fetch and rasterizing the points back to a raster was slow. Tools for this exist for [ArcGIS](https://umesc.usgs.gov/management/dss/wind_fetch_wave_models_2012update.html) which was not an option. In the end I decided it to use the opportunity to do some work in Python and created a useful and extendable interface along with a command-line tool.
+
+It is available on [Github](https://github.com/KennethTM/WindFetch). A script with the class, methods and functions doing the work, a script for exercising theme and a command-line tool.
+
+### The program
+
+The program is kept simple for now but designed to be extensible for wave modeling for example. The example illustrates usage for a lake, however it can be used for all types of waterbodies. When importing data, a water-id value is supplied to separate water and land. Fetch lengths are calculated from top to bottom for regular sized arrays. In turn, lengths are calculated for each supplied direction by rotating the array. 
+
+The program relies on some Python libraries to be installed. Rasterio/GDAL is used for import and export, Numpy/SciPy for array handling. A suitable environment can quickly be setup using Anaconda. 
+
+### Usage
+
+For now, the program is a Python script which can be imported and used. The following examples assume you work in the same directory where the scripts are. 
+
+An example of a python workflow:
+
+```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
+from waterbody import *
+
+#Read the lake from a .tif file. This raster contains cells with 1's and 0's, where the 1's represent lake surface
+lake_raster = "test_files/gurre_lake"
+lake = read_waterbody(lake_raster+".tif", 1)
+
+#Create a list with directions for which fetch should be calculated
+fetch_dirs = [0, 45, 90, 135, 180, 225, 270, 315]
+
+#Optional weights can be provided. The weights may be arbitrary and are multiplied with the fetch length
+fetch_weigths = [1.0]*8
+
+#Call method for calculating fetch length
+lake_fetch = lake.fetch(fetch_dirs, fetch_weigths)
+
+#Create list with summary statistics
+summary_stats = ["min", "mean", "max"]
+
+#Call method for calculating cell-wise summary statistics
+lake_fetch_summary = lake_fetch.summary(summary_stats)
+
+#Save fetch directions and summary as multi-band .tif rasters
+#Metadata from the imported raster are re-used
+save_waterbody(lake_fetch, lake_raster+"_fetch.tif")
+save_waterbody(lake_fetch_summary, lake_raster+"_fetch_summary.tif")
+```
+
+The same functionality is also available from the command-line. Some examples are provided below:
+
+```{bash, eval=FALSE, echo=TRUE}
+#Wind fetch from the four major directions (N, S, E and W)
+python waterbody_cli.py -i 'gurre_lake.tif' -o 'gurre_lake_fetch.tif' -id 1 -d '0,90,180,270'
+
+#Summary of wind fetch from N, S, E and W
+python waterbody_cli.py -i 'gurre_lake.tif' -o 'gurre_lake_fetch_summary.tif' -id 1 -d '0,90,180,270' -s 'min,mean,max'
+
+#Summary of weighted wind fetch from N, S, E and W
+python waterbody_cli.py -i 'gurre_lake.tif' -o 'gurre_lake_fetch_weighted_summary.tif' -id 1 -d '0,90,180,270' -w '0.9,1.1,1.35,0.75' -s 'min,mean,max'
+```
+
+The resulting rasters containing fetch length for each cell and direction are visualized below using Leaflet. Explore the interactive map and use the box to show/hide the raster layers, notice how islands create shelter and "reset" fetch. The sheltering affect the influence of wind and wave action.
+
+```{r, echo=FALSE}
+library(raster);library(leaflet)
+
+fetch <- stack("gurre_lake_fetch.tif")
+names(fetch) <- as.character(paste0("Degree_", seq(0, 315, 45)))
+
+pal <- colorNumeric(palette = "inferno", values(fetch[["Degree_135"]]),
+  na.color = "transparent")
+
+leaflet() %>% 
+  addTiles() %>%
+  addRasterImage(fetch[["Degree_45"]], colors = pal, opacity = 0.5, group = "45") %>%
+  addRasterImage(fetch[["Degree_135"]], colors = pal, opacity = 0.5, group = "135") %>%
+  addRasterImage(fetch[["Degree_225"]], colors = pal, opacity = 0.5, group = "225") %>%
+  addRasterImage(fetch[["Degree_315"]], colors = pal, opacity = 0.5, group = "315") %>%
+  addLegend(pal = pal, values = values(fetch[["Degree_135"]]),
+    title = "Fetch (m)", opacity = 1) %>% 
+  addLayersControl(
+    overlayGroups = c("45", "135", "225", "315"),
+    options = layersControlOptions(collapsed = FALSE),
+    position = "topleft"
+  )
+```
+
+
+### Future of WindFetch
+
+In the future, I want to expand the functionality in WindFetch to enable simple wave modeling. Importing wind data and calculating metrics and weights should also be included. Finally, I hope to increase the speed of the algorithm and have some ideas on how to improve the current approach. In the end, this was a fun small project which improved my Python!

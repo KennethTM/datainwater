@@ -1,21 +1,19 @@
 ---
-date: "2020-02-25T00:00:00Z"
+date: "2020-02-25"
 external_link: ""
 image: 
   caption: Groundwater carbon dioxide, figure by Kenneth Thorø Martinsen
   focal_point: Smart
 links:
 slides: 
-summary: Quantifying large scale carbon dioxide concentration and flux from freshwaters
+summary: Quantifying large scale carbon dioxide concentration and emission from freshwaters
 tags:
 - carbon dioxide
 - carbon budget
 - climate change
-- machine learning
-- GIS
 - COWIfonden
-- R
 - groundwater
+- hydrology
 title: Towards a national freshwater carbon budget
 url_code: ""
 url_pdf: ""
@@ -31,7 +29,7 @@ No doubt that the global agenda is all about CO~2~ and its role in ongoing clima
 
 Dissolved CO~2~ in water can be estimated from alkalinity, pH and water temperature and this data is avaiable from the national monitoring program. The product of the concentration and the gas transfer velocity yields the flux. We have used empirical models to estimate the gas transfer velocity in both lakes and streams for different size categories. From the density distributions of CO~2~ flux we quantified the uncertainty using Monte-Carlo simulation.  
 
-The results will be published as a danish popular science article. We also discuss the influence of the watershed and groundwater.
+The results have been published as a danish popular science article in the magazine ['Vand & Jord'](http://www.vand-og-jord.dk/).
 
 ![](ridge_flux_english.png)
 
