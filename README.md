@@ -1,2 +1,2 @@
-# shallowwaters
-Personal webpage using blogdown and academic hugo theme
+# datainwater
+Personal webpage using blogdown and academic hugo theme.
