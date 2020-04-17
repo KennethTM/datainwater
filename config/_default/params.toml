@@ -9,7 +9,7 @@
 #   Latest themes (may require updating): https://sourcethemes.com/academic/themes/
 #   Browse built-in themes in `themes/academic/data/themes/`
 #   Browse user installed themes in `data/themes/`
-theme = "ocean"
+theme = "my_theme"
 
 # Enable users to switch between day and night mode?
 day_night = false
@@ -86,7 +86,7 @@ phone = ""
 
 # Address
 # For country_code, use the 2-letter ISO code (see https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 )
-address = {street = "Universitetsparken 4, 3. floor", city = "Copenhagen", region = "", postcode = "2100", country = "Denmark", country_code = "DNK"}
+address = {street = "Universitetsparken 4, 3. floor", city = "Copenhagen", region = "", postcode = "DK-2100", country = "Denmark", country_code = "DNK"}
 
 # Geographic coordinates
 # To get your coordinates, right-click on Google Maps and choose "What's here?". The coords will show up at the bottom.
