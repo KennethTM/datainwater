@@ -27,7 +27,7 @@ image:
 </div>
 <div id="are-extremes-the-new-normal" class="section level3">
 <h3>Are extremes the new normal?</h3>
-<p>Forecasts and climate models suggests that this might be the new norm and that we should plan accordingly. Extremes will likely be more common meaning we should get used to periods with drought or heavy rain. This makes identifying lowland areas which are susceptible to flooding an important priority.</p>
+<p>Forecasts and climate models suggest that this might be the new norm and that we should plan accordingly. Extremes will likely be more common meaning we should get used to periods with drought or heavy rain. This makes identifying lowland areas which are susceptible to flooding an important priority.</p>
 </div>
 <div id="height-above-nearest-drainage" class="section level3">
 <h3>Height above nearest drainage</h3>
@@ -35,7 +35,7 @@ image:
 </div>
 <div id="from-digital-elevation-model-to-hand-map" class="section level3">
 <h3>From digital elevation model to HAND map</h3>
-<p>While the TauDEM software use command line programs, the procedure has been scripted in Python. This makes stuff easier and also gives access to some other libraries for raster calculations like Rasterio. The first part loads some libraries, defines paths and retrieves some raster metadata from the elevation model.</p>
+<p>While the TauDEM software uses command line programs, the procedure has been scripted in Python. This makes stuff easier and also gives access to some other libraries for raster calculations like Rasterio. The first part loads some libraries, defines paths and retrieves some raster metadata from the elevation model.</p>
 <pre class="python"><code>import subprocess
 import os
 import rasterio
@@ -61,7 +61,7 @@ with rasterio.open(dem.format(&quot;&quot;)) as ds:
     dem_bb = ds.bounds
     dem_res = ds.res
     dem_meta = ds.profile</code></pre>
-<p>Next, I prepare the stream vector file. While this vector file is not necessary, as streams can be delineated from flow accumulation, we use the stream network in preprocessing of the elevation model. Furthermore, we use it to derive a more realistic stream network which is consistent with the calculated flow directions. The initial stream vector file is converted to a .sqlite file with Spatialite enabled. This way, we can use spatial functions in our SQL queries and obtain start/end point of streams. These points are used when delineating the new stream network. Both the stream network and start/end points are rasterized to the resolution and extent of elevation model.</p>
+<p>Next, I prepare the stream vector file. While this vector file is not necessary, as streams can be delineated from flow accumulation, we use the stream network in preprocessing of the elevation model. Furthermore, we use it to derive a more realistic stream network which is consistent with the calculated flow directions. The initial stream vector file is converted to a .sqlite file with Spatialite enabled. This way, we can use spatial functions in our SQL queries and obtain the start/end point of streams. These points are used when delineating the new stream network. Both the stream network and start/end points are rasterized to the resolution and extent of the elevation model.</p>
 <pre class="python"><code>#prepare stream vector file: reproject and make 2 dimensional, save as .sqlite file
 subprocess.call([&quot;ogr2ogr&quot;,
                  &quot;-f&quot;, &quot;SQLite&quot;,
@@ -181,7 +181,7 @@ subprocess.call(mpi_settings+[&quot;threshold&quot;,
                 &quot;-ssa&quot;, dem.format(&quot;_condssa&quot;),
                 &quot;-src&quot;, dem.format(&quot;_condsrc&quot;),
                 &quot;-thresh&quot;, &quot;1&quot;])</code></pre>
-<p>Finally, we calculate D-Inf flow directions and HAND. The result is a grid where each cell denote the vertical height above the nearest stream, with “nearest” being the nearest stream cell in along the D-Inf flowpath. In the final step, we use some raster math to assign zero to the coastal area for which HAND has not been calculated.</p>
+<p>Finally, we calculate D-Inf flow directions and HAND. The result is a grid where each cell denotes the vertical height above the nearest stream, with “nearest” being the nearest stream cell in along the D-Inf flowpath. In the final step, we use some raster math to assign zero to the coastal area for which HAND has not been calculated.</p>
 <pre class="python"><code>#calculate infinity flow directions
 subprocess.call(mpi_settings+[&quot;dinfflowdir&quot;,
                     &quot;-fel&quot;, dem.format(&quot;_condfel&quot;),
@@ -218,5 +218,5 @@ with rasterio.open(dem.format(&quot;_condhandzeros&quot;), &quot;w&quot;, **hand
 </div>
 <div id="final-thoughts" class="section level3">
 <h3>Final thoughts</h3>
-<p>Calculation of terrain indices like HAND could improve mapping of flood prone areas. It has also been suggested to map flood extent using a combination of HAND and rating curve measurements at stream gauges. However, HAND is not only interesting for flood mapping purposes. It is also measure of terrain-stream hydrological connectivity which is interesting for carbon cycling and transport in freshwater environments.</p>
+<p>A high proportion of Denmark is very close (vertically) to streams which often causes flooding in populated areas. As Denmark is a very flat country, it is necessary to implement smart management of surface- and groundwater to avoid costly flooding events in the future climate. Calculation of terrain indices like HAND could improve mapping of flood prone areas. It has also been suggested to map flood extent using a combination of HAND and rating curve measurements at stream gauges. However, HAND is not only interesting for flood mapping purposes. It is also a measure of terrain-stream hydrological connectivity which is interesting for carbon cycling and transport in freshwater environments.</p>
 </div>

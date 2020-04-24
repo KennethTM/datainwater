@@ -1,0 +1,233 @@
+---
+title: Environmental monitoring effort of aquatic systems over time
+author: Kenneth
+date: '2020-04-22'
+draft: true
+categories:
+  - R
+tags:
+  - aquatic environment
+  - web scraping
+  - visualization
+slug: tn_tp_dk
+lastmod: '2020-02-20T11:55:27+01:00'
+featured: no
+image: 
+  caption: ''
+  placement: ''
+  focal_point: ''
+  preview_only: yes
+---
+
+
+
+<div id="monitoring-of-the-aquatic-environment" class="section level3">
+<h3>Monitoring of the aquatic environment</h3>
+<p>The <a href="https://eng.mst.dk/">Environmental Protection Agency</a> and <a href="https://dce.au.dk/en/">Danish Centre For Environment And Energy</a> are responsible for the large scale monitoring of the aquatic environment in Denmark. This covers lakes, streams, coastal habitats and more. Recent and historic monitoring data are publicly available from the surface water database <a href="https://odaforalle.au.dk/main.aspx">ODA</a>. This is an amazing initiative which I use extensively in my research.</p>
+</div>
+<div id="historic-changes-in-monitoring-effort" class="section level3">
+<h3>Historic changes in monitoring effort</h3>
+<p>As part of another <a href="https://www.datainwater.com/project/stream_pco2/">project</a>, I had downloaded monitoring data from Denmark, Sweden and Finland. During the initial data exploration I plotted the number of samples over time in order to spot potential biases and was surprised. My expectation would be a relatively constant or increasing number of samples per year which was the case for Sweden and Finland. So I set out to investigate this further in a Danish context.</p>
+</div>
+<div id="getting-the-data-into-shape" class="section level3">
+<h3>Getting the data into shape</h3>
+<p>I chose to download all observations of total phosphorus (TN) and nitrogen (TN) in lakes, streams and coastal waters. These variables are likely to be representative of the monitoring effort as they are the most commonly measured parameters and are key macro-nutrients in aquatic systems.</p>
+<p>Data is downloaded from ODA and imported into R:</p>
+<pre class="r"><code>#Load libraries used for data munging and visualization
+library(tidyverse);library(lubridate);library(rvest);library(zoo)
+library(ggrepel);library(readxl);library(gganimate)
+
+#Get files paths
+files &lt;- list.files(path_to_data, full.names = TRUE, pattern = &quot;*.txt&quot;)
+
+#Load data files for coastal, lakes and streams
+ocean &lt;- read_csv2(files[1])
+lake &lt;- read_csv2(files[2])
+stream &lt;- read_csv2(files[3])
+
+#Do some data munging to get the three tables in a common format
+#Added system variable and unique site_id
+ocean_df &lt;- ocean %&gt;% 
+  mutate(system = &quot;ocean&quot;,
+         site_id = group_indices(., `MC-stationsnr`),
+         year = year(Dato),
+         Resultat = Resultat/1000) %&gt;% 
+  select(system, site_id, x_utm = ObsSted_X_UTM, y_utm = ObsSted_Y_UTM,
+         year, date = Dato, var = Parameter, value = Resultat)
+
+lake_df &lt;- lake %&gt;% 
+  mutate(system = &quot;lake&quot;,
+         site_id = group_indices(., ObservationsStedNr),
+         date = ymd(Startdato),
+         year = year(date)) %&gt;% 
+  select(system, site_id, year, date, 
+         x_utm = Xutm_Euref89_Zone32, y_utm = Yutm_Euref89_Zone32, 
+         var = Parameter, value = Resultat)
+
+stream_df &lt;- stream %&gt;% 
+  mutate(system = &quot;stream&quot;,
+         site_id = group_indices(., ObservationsStedNr),
+         date = ymd(Startdato),
+         year = year(date)) %&gt;% 
+  select(system, site_id, year, date, 
+         x_utm = Xutm_Euref89_Zone32, y_utm = Yutm_Euref89_Zone32, 
+         var = Parameter, value = Resultat)
+
+#Combine tables and keep observations between 1950 and 2020
+df &lt;- bind_rows(ocean_df, lake_df, stream_df) %&gt;% 
+  mutate(var = ifelse(var %in% c(&quot;Nitrogen,total&quot;, &quot;Nitrogen,total N&quot;), &quot;TN&quot;, &quot;TP&quot;)) %&gt;% 
+  filter(between(date, ymd(&quot;1950-01-01&quot;), ymd(&quot;2020-01-01&quot;)))</code></pre>
+<p>The data frame with all the observations has 1,183,334 observations: 397,480 from estuaries and oceans, 156,314 from lakes and 629,540 from streams. The count of samples by year for both TN and TP can quickly be visualized:</p>
+<pre class="r"><code>#Count number of TN and TP samples per year
+sample_per_year &lt;- df %&gt;% 
+  group_by(year, var) %&gt;% 
+  summarise(n = n()) %&gt;% 
+  mutate(date = ymd(paste0(year, &quot; 01 01&quot;))) 
+
+#Plot both TN and TP versus time
+sample_per_year %&gt;% 
+  ggplot(aes(year, n, col = var))+
+  scale_color_manual(values = c(&quot;TN&quot; = &quot;black&quot;, &quot;TP&quot; = &quot;grey&quot;))+
+  geom_line(size = 1.5)+
+  theme_classic()+
+  ylab(&quot;Number of samples&quot;)+
+  xlab(&quot;Year&quot;)+
+  theme(legend.title = element_blank(),
+        axis.text = element_text(color = &quot;black&quot;),
+        legend.position = c(0.2, 0.8))</code></pre>
+<p><img src="/post/tn_tp_time/index_files/figure-html/unnamed-chunk-3-1.png" width="480" /></p>
+</div>
+<div id="getting-additional-data" class="section level3">
+<h3>Getting additional data</h3>
+<p>So the number of samples of both TN and TP, which follows each other closely, show periods of sudden increase and decrease. The first initiative started during the 1970’s when the aquatic environment received a lot of attention due to its poor state. This can be seen as green lakes and summer anoxia events in coastal waters. However, I suspected that politics might also play a role? Let’s do a tiny bit of web scraping and extract data from a wikipedia table describing the reigning political parties over time.</p>
+<pre class="r"><code>#Scrape wikipedia table
+url &lt;- &#39;https://da.wikipedia.org/wiki/Danmarks_regeringer&#39;
+
+#Read the html and extract table data
+wiki_table &lt;- url %&gt;% 
+  read_html() %&gt;% 
+  html_node(&#39;body #content .mw-parser-output table&#39;) %&gt;%
+  html_table(fill = TRUE) %&gt;% 
+  tbl_df()
+
+#Clean table before plotting
+wiki_table_clean &lt;- wiki_table %&gt;% 
+  mutate(date_start = as.Date(Fra, format = &quot;%d. %B %Y&quot;)) %&gt;%
+  filter(date_start &gt; ymd(&quot;1950-01-01&quot;)) %&gt;% 
+  separate(`Parti(er)`, paste0(&quot;parti_&quot;, 1:5), sep = &quot;,&quot;) %&gt;% 
+  select(-Fra, -Kaldenavn) %&gt;% 
+  mutate(date_end = lead(date_start, 1), 
+         statsminister = gsub(&quot;Regeringen *&quot;, &quot;&quot;, Regeringsnavn))
+
+wiki_table_clean[33, &quot;date_end&quot;] &lt;- ymd(&quot;2020-01-01&quot;)</code></pre>
+</div>
+<div id="the-number-of-tn-and-tp-samples-versus-reigning-political-party" class="section level3">
+<h3>The number of TN and TP samples <em>versus</em> reigning political party</h3>
+<p>Coloring the plot by the reigning political party should allow us to see potential patterns. Lets also sum the number of TN and TP samples each year as they are very similar.</p>
+<pre class="r"><code>#Summarise total number of samples (both TN and TP) by year
+sample_per_year_total &lt;- df %&gt;% 
+  group_by(year) %&gt;% 
+  summarise(n = n()) %&gt;% 
+  mutate(date = ymd(paste0(year, &quot; 01 01&quot;)))
+
+#Define party colors for figure
+party_colors &lt;- c(&quot;Venstre&quot; = &quot;blue&quot;, &quot;Socialdemokratiet&quot; = &quot;red&quot;, 
+                  &quot;Det Konservative Folkeparti&quot; = &quot;chartreuse3&quot;,
+                  &quot;Det Radikale Venstre&quot; = &quot;purple&quot;, 
+                  &quot;TN&quot; = &quot;white&quot;, &quot;TP&quot; = &quot;grey&quot;)
+
+#Create figure and make animation
+anim_plot &lt;- ggplot()+
+  geom_rect(data = wiki_table_clean, inherit.aes = FALSE, 
+            aes(xmin = date_start, xmax = date_end, ymin = -Inf, ymax = 50000, 
+                fill = factor(parti_1)), alpha = 0.75)+
+  geom_line(data = sample_per_year_total, inherit.aes = FALSE, 
+            aes(date, n), col = &quot;black&quot;, size = 1.2)+
+  scale_fill_manual(values = party_colors, name = &quot;Reigning political party&quot;)+
+  scale_x_date(breaks = seq(ymd(&quot;1955-01-01&quot;), ymd(&quot;2020-01-01&quot;), &quot;5 years&quot;), 
+               date_labels = &quot;%Y&quot;, 
+               limits = c(ymd(&quot;1950-10-01&quot;), ymd(&quot;2020-01-01&quot;)), 
+               expand = c(0,0))+
+  ylab(NULL)+
+  ggtitle(&quot;Total number of samples (TN &amp; TP)&quot;)+
+  xlab(NULL)+
+  scale_y_continuous(limits = c(0, 50000), 
+                     breaks = seq(0, 50000, 10000), 
+                     expand = c(0.01,0))+
+  guides(fill = guide_legend(title.position = &quot;top&quot;))+
+  theme_classic()+
+  theme(axis.line.y=element_blank(),
+        axis.text.y=element_text(colour = &quot;black&quot;, size = 10),
+        axis.text.x=element_text(colour = &quot;black&quot;, size = 10),
+        axis.line.x=element_blank(),
+        axis.ticks.length = unit(1.5, &quot;mm&quot;),
+        plot.margin = unit(c(0.2, 0.5, 0.2, 0.5), &quot;cm&quot;),
+        axis.title.y = element_text(hjust=0.25),
+        legend.position = &quot;bottom&quot;)+
+  transition_reveal(date)
+
+anim_save(&quot;gif_plot.gif&quot;, anim_plot, width = 500, height = 300)</code></pre>
+<p><img src="/img/gif_plot.gif" /></p>
+<p>What a different appearance! It appears that rapid rise in number of samples is occurring while the <em>“Det Konservative Folkeparti”</em> is reigning. This is a time with increasing focus on environmental issues where large scale initiatives are implemented to improve the poor condition of the aquatic environment. The later decrease is with the party <em>“Venstre”</em> in the lead where the effort to monitor the aquatic environment experienced a drastic fall. This is even before the financial crisis during 2007/2008 set in. An obvious next step could be to retrieve and plot the same data from Sweden for example where monitoring data are also readily available. Anyhow, for Denmark it will be interesting to see how the trend develops in the future. Will the environmental monitoring effort and the number of TN and TP samples reach the heights of previous years?</p>
+</div>
+<div id="bonus-plot-adding-events-and-annotations" class="section level3">
+<h3>Bonus plot: Adding events and annotations</h3>
+<p>Further information from the scraped table can also be added, such as the prime minister. Also, I have added some interesting events along the timeline but they may not make sense for non-Danish people.</p>
+<pre class="r"><code>#Create table with events and date
+events &lt;- tribble(~date, ~label,
+                  &quot;11-10-1971&quot;, &quot;Miljøministeriet oprettes&quot;,
+                  &quot;01-06-1973&quot;, &quot;Miljølov&quot;,
+                  &quot;08-10-1986&quot;, &quot;Døde hummere&quot;,
+                  &quot;04-06-1987&quot;, &quot;Vandmiljøplan&quot;,
+                  &quot;01-06-2003&quot;, &quot;Ikke en fugl, ikke en fisk, ikke en frø&quot;,
+                  &quot;01-06-2008&quot;, &quot;Finanskrisen&quot;) %&gt;% 
+  mutate(date = dmy(date)) %&gt;% 
+  add_column(n = c(1000, 3000, 17000, 20000, 40000, 19000))
+
+#Create y-coordinates for the events using linear interpolation
+events_interp_ypos &lt;- sample_per_year_total %&gt;% 
+  right_join(data.frame(date=seq(ymd(&quot;1951-01-01&quot;), ymd(&quot;2020-01-01&quot;), &quot;1 day&quot;))) %&gt;% 
+  mutate(n_interp = na.approx(n, na.rm = FALSE)) %&gt;% 
+  select(date, n_interp) %&gt;% 
+  right_join(events)
+
+ggplot()+
+  geom_rect(data = wiki_table_clean, inherit.aes = FALSE, 
+            aes(xmin = date_start, xmax = date_end, ymin = -Inf, ymax = 55000, 
+                fill = factor(parti_1)), alpha = 0.6)+
+  geom_line(data = sample_per_year_total, inherit.aes = FALSE, 
+            aes(date, n), col = &quot;black&quot;, size = 1)+
+  geom_point(data = wiki_table_clean, inherit.aes = FALSE, 
+             aes(x = date_start, y = 55000, col = factor(parti_1)), 
+             show.legend = FALSE)+
+  geom_text_repel(data = wiki_table_clean, 
+                  aes(x = date_start, y = 55000, 
+                      label = statsminister, col = factor(parti_1)),
+                  direction = &quot;x&quot;, angle = 90, vjust = 0, segment.size = 0.2, 
+                  nudge_y = 5000, show.legend = FALSE)+
+  scale_fill_manual(values = party_colors, name = &quot;Reigning political party&quot;)+
+  scale_color_manual(values = party_colors)+
+  scale_x_date(breaks = seq(ymd(&quot;1955-01-01&quot;), ymd(&quot;2020-01-01&quot;), &quot;5 years&quot;), 
+               date_labels = &quot;%Y&quot;, 
+               limits = c(ymd(&quot;1950-10-01&quot;), ymd(&quot;2020-01-01&quot;)), 
+               expand = c(0,0))+
+  ylab(&quot;Antal prøver per år (TN &amp; TP)&quot;)+
+  xlab(NULL)+
+  scale_y_continuous(limits = c(0, 90000), breaks = seq(0, 55000, 10000), 
+                     expand = c(0.01,0))+
+  guides(fill = guide_legend(title.position = &quot;top&quot;))+
+  theme_classic()+
+  geom_label_repel(data = events_interp_ypos, aes(date, n_interp, label = label), 
+                   min.segment.length = 0, segment.colour = &quot;black&quot;, 
+                   nudge_x = -3000, nudge_y = 9000)+
+  geom_point(data = events_interp_ypos, aes(date, n_interp), col = &quot;black&quot;, size = 2)+
+  theme(axis.line.y=element_blank(),
+        axis.text.y=element_text(colour = &quot;black&quot;, size = 10),
+        axis.text.x=element_text(colour = &quot;black&quot;, size = 10),
+        axis.line.x=element_blank(),
+        axis.ticks.length = unit(1.5, &quot;mm&quot;),
+        plot.margin = unit(c(0.2, 0.5, 0.2, 0.5), &quot;cm&quot;),
+        axis.title.y = element_text(hjust=0.25),
+        legend.position = &quot;bottom&quot;)</code></pre>
+<p><img src="/post/tn_tp_time/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>

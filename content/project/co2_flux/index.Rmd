@@ -14,7 +14,7 @@ tags:
 - COWIfonden
 title: New method for measuring carbon dioxide flux
 url_code: ""
-url_pdf: ""
+url_pdf: "https://curis.ku.dk/ws/files/203281341/A_simple_and_cost_efficient_automated_floating_chamber_for_continuous_measurements_of_carbon_dioxide_gas_flux_on_lakes.pdf"
 url_slides: ""
 url_video: ""
 ---
