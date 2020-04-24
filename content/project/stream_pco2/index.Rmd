@@ -6,7 +6,7 @@ image:
   focal_point: Smart
 links:
 slides: 
-summary: Using machine learning and GIS predict carbon dioxide in Scandinavia
+summary: Using machine learning and GIS predict carbon dioxide in streams
 tags:
 - carbon dioxide
 - carbon budget
@@ -14,7 +14,7 @@ tags:
 - hydrology
 - machine learning
 - GIS
-title: Predicting carbon dioxide in large stream networks 
+title: Predicting carbon dioxide in Scandinavian stream networks 
 url_code: ""
 url_pdf: ""
 url_slides: ""
@@ -25,7 +25,7 @@ url_video: ""
 
 Streams play a key role in the freshwater carbon budget where carbon is transformed, transported and released to the atmosphere as CO~2~. The magnitude of stream carbon emissions became apparent when constructing a national freshwater carbon budget for Denmark. However, the uncertainty in current estimates are high. One way to overcome this is by improving our ability to predict the CO~2~ partial pressure (pCO~2~) in streams. 
 
-### Open data 
+### Assembling the data 
 
 In order to train a predictive model observational data is needed. While stream greenhouse gasses are rarely measured directly, pCO~2~ can be estimated from alkalinity, pH and temperature. This is often available from national monitoring of surface waters and we open data from Denmark, Sweden and Finland. As predictor variables we found suitable remote sensing derived products covering [EU](https://land.copernicus.eu/imagery-in-situ). We gathered high resolution (25 meter) data on elevation, land cover (water and wetness, forest, grassland) and coarser scale climate data such as air [temperature and precipitation](https://www.worldclim.org/) and [runoff](http://www.gloh2o.org/gscd/).
 
@@ -33,9 +33,9 @@ In order to train a predictive model observational data is needed. While stream 
 
 The EU stream network obtained from very high resolution imagery was used to delineate a realistic stream network for flow modeling. [TauDEM](http://hydrology.usu.edu/taudem/taudem5/index.html) software was used to process the elevation model and calculate catchment characteristics throughout the network. Using the annual mean pCO~2~ as the response and catchment characteristics as predictor variables, the performance of eight different machine learning models were assessed using nested cross-validation. The random forest algorithm provided the best accuracy and was used to predict stream pCO~2~ through the entire stream network in a 25 meter resolution grid. Runoff data and stream channel slope was used to estimate gas transfer velocity from empirical relationship and in turn stream CO~2~ flux. 
 
-The map shows a section of the final grid of predicted stream pCO~2~ (unit micro-atmosphere) which covers the stream network in Denmark, Sweden and Finland.
+Zoom in to explore the map, which shows a section of the final grid of predicted stream pCO~2~ (unit micro-atmosphere) which covers the stream network in Denmark, Sweden and Finland. 
 
-```{r, echo=FALSE, message=FALSE}
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
 library(raster);library(leaflet);library(sf)
 
 stream <- raster("stream_pco2_cut.tif")
