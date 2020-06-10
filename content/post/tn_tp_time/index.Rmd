@@ -9,7 +9,6 @@ tags:
   - web scraping
   - visualization
 slug: tn_tp_dk
-lastmod: '2020-02-20T11:55:27+01:00'
 featured: no
 image: 
   caption: ''
