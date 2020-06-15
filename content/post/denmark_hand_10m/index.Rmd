@@ -236,7 +236,7 @@ And of course a plot of the result in a downsampled version, where the values al
 ```{r, echo=FALSE, eval=FALSE}
 #load data, plot and save to .png file
 library(raster);library(tidyverse)
-raster_hand <- raster("dk_dtm_10m_condhandzeros_100m.tif")
+raster_hand <- raster("dk_dtm_10m_condhandzeros_500m.tif")
 
 raster_hand_df <- raster_hand %>% 
   as.data.frame(xy = TRUE, na.rm = TRUE) %>% 
