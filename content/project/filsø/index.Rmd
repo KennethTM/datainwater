@@ -25,6 +25,8 @@ url_video: ""
 
 During the summer 2018 all fish in the southern part Filsø died suddenly ([DR news](https://www.dr.dk/nyheder/indland/hvorfor-er-80-tons-fisk-i-jyllands-naeststoerste-soe-doede)). The event occurred after a long period of drought followed by a sudden rain event. This caused a high inflow of water, and along with it, a large pulse of organic matter which rapidly increased respiration rates within the lake and caused anoxia within few days. 
 
+We have described the mechanisms and cicumstances surrounding these events in a paper published in [Science of the Total Environment](https://www.sciencedirect.com/science/article/pii/S0048969720335920).
+
 ### Identifying the sources and management actions
 
 In this project we investigate the causes of the fish kill. We examine the ability of many natural tracers to identify sources of easily degradable organic matter and water with high oxygen consumption. We have established multiple stations in the catchment where we measure water flow and collect water samples several times a year. This way we can track and trace inputs of water solutes to the lake. 

@@ -8,6 +8,7 @@ categories:
 tags:
   - aquatic environment
   - visualization
+  - digital elevation model
 slug: lake_bathymetry
 featured: no
 image: 
