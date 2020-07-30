@@ -13,14 +13,14 @@ education:
 email: "kenneth.martinsen@bio.ku.dk"
 interests:
 - Freshwater carbon cycling
-- Spatial data and GIS
 - Statistics and machine learning
+- GIS
 - R, Python, Linux and open-source software
 name: Kenneth Thorø Martinsen
 organizations:
 - name: University of Copenhagen, Freshwater Biology Section
-  url: "https://www1.bio.ku.dk/fbs/"
-role: Research assistant
+  url: "https://www1.bio.ku.dk/english/research/fbs/"
+role: Biologist and data scientist
 social:
 - icon: envelope
   icon_pack: fas
@@ -37,6 +37,6 @@ user_groups:
 - Visitors
 ---
 
-Freshwater biologist by education with interests in everything related to **data, water and computing**. Research interest in freshwater carbon cycling, especially greenhouse gas fluxes and large scale carbon budgets.
+Freshwater biologist by education with research interest in freshwater carbon cycling, especially greenhouse gas fluxes and large scale carbon budgets. Enthusiastic about everyting related to data analysis and programming. 
 
-This webpage is my outlet for posts about cool data science stuff and ongoing/previous projects. Everything is very likely to have something to do with data and water!
+This webpage is an outlet for posts on data science and ongoing/previous projects. Everything is very likely to have something to do with **data and water**!

@@ -1,5 +1,5 @@
 ---
-title: Bathymetric maps with R
+title: Bathymetric maps with R and Shiny
 author: Kenneth
 date: '2020-06-10'
 categories:
@@ -31,7 +31,7 @@ image:
 
 <div id="bathymetric-maps" class="section level3">
 <h3>Bathymetric maps</h3>
-<p>It is interesting to know the depth of aquatic environments ranging from lakes to oceans. We can note the depth at different geographic coordinates and use this information to produce bathymetric maps and contour lines. Often however, measurements are only obtained from relatively few points which means that interpolation is required to produce continuous and pretty maps. Higher quality maps can be produced using modern sonar and echo-sounder technology but this may also require gaps to be interpolated. Here, I focus on producing bathymetric from sparse points measurements.</p>
+<p>Knowing the depth of in aquatic environments are of interest to many e.g. sailors in coastal waters or anglers in lakes. We can measure the depth at different geographic coordinates and use this information to produce bathymetric maps and contour lines. Often however, measurements are only obtained from relatively few points which means that interpolation is required to produce continuous and pretty maps. Higher quality maps can be produced using modern sonar and echo-sounder technology but this may also require gaps to be interpolated. Here, I focus on producing bathymetric from sparse points measurements.</p>
 </div>
 <div id="get-some-data" class="section level3">
 <h3>Get some data!</h3>
@@ -164,5 +164,11 @@ bathy_df %&gt;%
 </div>
 <div id="whats-next" class="section level3">
 <h3>Whats next?</h3>
-<p>As showed in this example, some choices regarding interpolation method must be made which most often depend on the data. If in doubt, the simplest approach is often the most sensible. This example show that R has good tools available for fast experimentation but for rich data-sets spanning a large geographical region other options are also available. <a href="https://gdal.org/">GDAL</a> provide command-line tools to do this which is something I will show in another post. By saving the resulting maps as .kml/.kmz files they can also be viewed in Google Earth on a phone along with your current position. This is a nice feature if the maps are needed for field work or fishing.</p>
+<p>As showed in this example, some choices regarding interpolation method must be made which most often depend on the data. If in doubt, the simplest approach is often the most sensible. This example shows that R has good tools available for fast experimentation but for rich data-sets spanning a large geographical region other options are also available. <a href="https://gdal.org/">GDAL</a> provide command-line tools to do this which is something I will show in another post. By saving the resulting maps as .kml/.kmz files they can also be viewed in Google Earth on a phone along with your current position. This is a nice feature if the maps are needed for field work or fishing.</p>
+</div>
+<div id="teaser-interactive-bathymetric-interpolation-using-r-shiny" class="section level3">
+<h3>Teaser: Interactive bathymetric interpolation using R Shiny</h3>
+<p>I build two simple R Shiny web apps (hosted at <a href="https://www.shinyapps.io/" class="uri">https://www.shinyapps.io/</a>) to help non-R folks perform the same interpolation. The <a href="https://kennethtm.shinyapps.io/xyz_file_converter/">first app</a> is a tool for converting XYZ depth measurements in a textfile to a spatial vector point file which is required for the interpolation. This is done by uploading the file and filling out the missing fields defining text file settings and geographical coordinate system. Followingly, a “.sqlite” spatial file can be downloaded. This file, along with a polygon of the lake boundary, are then used as input for the interpolation using the <a href="https://kennethtm.shinyapps.io/lake_interpolator/">second app</a>. Two interpolation methods are available and resolution of the output raster is defined by the user. The resulting raster and contour-lines can then be downloaded as “.kml/.kmz” files and viewed in Google Earth.</p>
+<p><em>Screenshot showing the second app which do the interpolation in action</em></p>
+<p><img src="/img/bathy_interpolate.png" /></p>
 </div>

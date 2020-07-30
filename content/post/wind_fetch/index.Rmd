@@ -19,6 +19,10 @@ image:
   preview_only: yes
 ---
 
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
 ### Wind, fetch and waves
 
 Wind traveling across water surfaces creates waves. Wave action depends on several parameters including fetch which is the unobstructed length which the wind can travel across a water surface from a given direction. Areas with high wind fetch are often exposed areas but this also depends on the primary wind direction. By calculating wind fetch, we can quantify exposure of different areas and shorelines in waterbodies. To my work, wind fetch is interesting from a physical perspective because it drives air-water gas exchange. However, it may also be interesting from an ecological viewpoint as wave exposure affects species distribution of submerged aquatic plants for example.
@@ -29,7 +33,7 @@ It is available on [Github](https://github.com/KennethTM/WindFetch). A script wi
 
 ### The program
 
-The program is kept simple for now but designed to be extensible for wave modeling for example. The example illustrates usage for a lake, however it can be used for all types of waterbodies. When importing data, a water-id value is supplied to separate water and land. Fetch lengths are calculated from top to bottom for regular sized arrays. In turn, lengths are calculated for each supplied direction by rotating the array. 
+The program is kept simple for now but designed to be extensible for wave modeling for example. The example illustrates usage for a lake, however it can be used for all types of waterbodies. When importing data, a water-id value is supplied to separate water and land. Fetch lengths are calculated from top to bottom for regular sized arrays. In turn, lengths are calculated for each supplied direction by rotating the array. In addition to producing rasters with the fetch distance only along a single direction, a smoothed fetch raster may also be created by specifying a number of minor directions centered around this direciton by a given minor distance (see also example in the [repository](https://github.com/KennethTM/WindFetch)). Furthermore, summary statistics can be calculated for a stack of fetch rasters and weighting of fetch directions are also implemented.
 
 The program relies on some Python libraries to be installed. Rasterio/GDAL is used for import and export, Numpy/SciPy for array handling. A suitable environment can quickly be set up using Anaconda. 
 
@@ -37,47 +41,46 @@ The program relies on some Python libraries to be installed. Rasterio/GDAL is us
 
 For now, the program is a Python script which can be imported and used. The following examples assume you work in the same directory where the scripts are. 
 
-An example of a python workflow:
+An example of a Python workflow:
 
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
-from waterbody import *
+from waterbody_refac import Waterbody, Fetch
+import gdal
+import matplotlib.pyplot as plt
+import numpy as np
 
-#Read the lake from a .tif file. This raster contains cells with 1's and 0's, where the 1's represent lake surface
-lake_raster = "test_files/gurre_lake"
-lake = read_waterbody(lake_raster+".tif", 1)
+#Run test of fetch functions
+#Danish lake Gurre (source: OpenStreetMap) attached as .sqlite file in projected crs 
+lake_vec = "test_files/gurre_lake"
 
-#Create a list with directions for which fetch should be calculated
-fetch_dirs = [0, 45, 90, 135, 180, 225, 270, 315]
+#Rasterize vector file using gdal
+lake_rast = gdal.Rasterize(lake_vec+".tif", lake_vec+".sqlite", xRes = 5, yRes = 5, burnValues = [1], noData = 0, outputType = gdal.GDT_Byte, creationOptions = ["COMPRESS=LZW"], )
+lake_rast = None
 
-#Optional weights can be provided. The weights may be arbitrary and are multiplied with the fetch length
-fetch_weigths = [1.0]*8
+#Read lake from .tif file
+lake = Waterbody.read_waterbody(lake_vec+".tif", 1)
 
-#Call method for calculating fetch length
-lake_fetch = lake.fetch(fetch_dirs, fetch_weigths)
+dirs = [0, 45, 90, 135, 180, 225, 270, 315]
 
-#Create list with summary statistics
-summary_stats = ["min", "mean", "max"]
+#Fetch along main directions
+fetch_main = lake.fetch(dirs)
 
-#Call method for calculating cell-wise summary statistics
-lake_fetch_summary = lake_fetch.summary(summary_stats)
+#Summary statistics of calculated fetches
+fetch_main_summary = fetch_main.summary(["min", "mean", "max"])
 
-#Save fetch directions and summary as multi-band .tif rasters
-#Metadata from the imported raster are re-used
-save_waterbody(lake_fetch, lake_raster+"_fetch.tif")
-save_waterbody(lake_fetch_summary, lake_raster+"_fetch_summary.tif")
-```
+#Apply weighting to each direction
+dirs_weights = [0.1, 0.3, 0.1, 0.2, 0, 0, 0.2, 0.1]
 
-The same functionality is also available from the command-line. Some examples are provided below:
+fetch_main_weight = fetch_main.weighting(dirs_weights)
 
-```{bash, eval=FALSE, echo=TRUE}
-#Wind fetch from the four major directions (N, S, E and W)
-python waterbody_cli.py -i 'gurre_lake.tif' -o 'gurre_lake_fetch.tif' -id 1 -d '0,90,180,270'
+#Calculated weighted mean
+fetch_main_weight_mean = fetch_main_weight.summary(["mean"])
 
-#Summary of wind fetch from N, S, E and W
-python waterbody_cli.py -i 'gurre_lake.tif' -o 'gurre_lake_fetch_summary.tif' -id 1 -d '0,90,180,270' -s 'min,mean,max'
+#Fetch along main directions each calculated as the average of 5 directions with a distance of 3 degrees
+fetch_minor = lake.fetch(dirs, minor_directions = 5, minor_interval = 3)
 
-#Summary of weighted wind fetch from N, S, E and W
-python waterbody_cli.py -i 'gurre_lake.tif' -o 'gurre_lake_fetch_weighted_summary.tif' -id 1 -d '0,90,180,270' -w '0.9,1.1,1.35,0.75' -s 'min,mean,max'
+#Write to file
+fetch_minor.write_waterbody(lake_vec+"_fetch_minor.tif")
 ```
 
 The resulting rasters containing fetch length for each cell and direction are visualized below using Leaflet. Explore the interactive map and use the box to show/hide the raster layers, notice how islands create shelter and "reset" fetch. The sheltering affects the influence of wind and wave action.
