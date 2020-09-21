@@ -44,7 +44,7 @@ For now, the program is a Python script which can be imported and used. The foll
 An example of a Python workflow:
 
 ```{python, eval=FALSE, echo=TRUE, python.reticulate=FALSE}
-from waterbody_refac import Waterbody, Fetch
+from WindFetch import Waterbody, Fetch
 import gdal
 import matplotlib.pyplot as plt
 import numpy as np
@@ -83,7 +83,7 @@ fetch_minor = lake.fetch(dirs, minor_directions = 5, minor_interval = 3)
 fetch_minor.write_waterbody(lake_vec+"_fetch_minor.tif")
 ```
 
-The resulting rasters containing fetch length for each cell and direction are visualized below using Leaflet. Explore the interactive map and use the box to show/hide the raster layers, notice how islands create shelter and "reset" fetch. The sheltering affects the influence of wind and wave action.
+The resulting rasters containing fetch length for each cell and direction are visualized below using Leaflet. Explore the interactive map and use the box to show/hide the raster layers, notice how islands create shelter and "reset" the fetch. The sheltering affects the influence of wind and wave action.
 
 ```{r, echo=FALSE}
 library(raster);library(leaflet)
@@ -108,8 +108,3 @@ leaflet() %>%
     position = "topleft"
   )
 ```
-
-
-### Future of WindFetch
-
-In the future, I want to expand the functionality in WindFetch to enable simple wave modeling. Importing wind data and calculating metrics and weights should also be included. Finally, I hope to increase the speed of the algorithm and have some ideas on how to improve the current approach. Anyhow, this was a fun small project which improved my Python!
