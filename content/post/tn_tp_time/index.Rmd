@@ -1,5 +1,5 @@
 ---
-title: Environmental monitoring effort of aquatic systems over time
+title: Politics and environmental monitoring of aquatic systems
 author: Kenneth
 date: '2020-04-22'
 categories:
@@ -43,9 +43,7 @@ df <- list_dfs[[4]]
 
 ```
 
-### Monitoring of the aquatic environment
-
-The [Environmental Protection Agency](https://eng.mst.dk/) and [Danish Centre For Environment And Energy](https://dce.au.dk/en/) are responsible for the large scale monitoring of the aquatic environment in Denmark. This covers lakes, streams, coastal habitats and more. Recent and historic monitoring data are publicly available from the surface water database [ODA](https://odaforalle.au.dk/main.aspx). This is an amazing initiative which I use extensively in my research. 
+Monitoring of the aquatic environment is necessary to support proper management. The [Environmental Protection Agency](https://eng.mst.dk/) and [Danish Centre For Environment And Energy](https://dce.au.dk/en/) are responsible for the large scale monitoring of the aquatic environment in Denmark. This covers lakes, streams, coastal habitats and more. Recent and historic monitoring data are publicly available from the surface water database [ODA](https://odaforalle.au.dk/main.aspx). This is an amazing initiative which I use extensively in my research. 
 
 ### Historic changes in monitoring effort
 

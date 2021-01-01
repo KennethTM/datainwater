@@ -1,5 +1,5 @@
 ---
-title: Environmental monitoring effort of aquatic systems over time
+title: Politics and environmental monitoring of aquatic systems
 author: Kenneth
 date: '2020-04-22'
 categories:
@@ -17,12 +17,11 @@ image:
   preview_only: yes
 ---
 
+<link href="index_files/anchor-sections/anchor-sections.css" rel="stylesheet" />
+<script src="index_files/anchor-sections/anchor-sections.js"></script>
 
 
-<div id="monitoring-of-the-aquatic-environment" class="section level3">
-<h3>Monitoring of the aquatic environment</h3>
-<p>The <a href="https://eng.mst.dk/">Environmental Protection Agency</a> and <a href="https://dce.au.dk/en/">Danish Centre For Environment And Energy</a> are responsible for the large scale monitoring of the aquatic environment in Denmark. This covers lakes, streams, coastal habitats and more. Recent and historic monitoring data are publicly available from the surface water database <a href="https://odaforalle.au.dk/main.aspx">ODA</a>. This is an amazing initiative which I use extensively in my research.</p>
-</div>
+<p>Monitoring of the aquatic environment is necessary to support proper management. The <a href="https://eng.mst.dk/">Environmental Protection Agency</a> and <a href="https://dce.au.dk/en/">Danish Centre For Environment And Energy</a> are responsible for the large scale monitoring of the aquatic environment in Denmark. This covers lakes, streams, coastal habitats and more. Recent and historic monitoring data are publicly available from the surface water database <a href="https://odaforalle.au.dk/main.aspx">ODA</a>. This is an amazing initiative which I use extensively in my research.</p>
 <div id="historic-changes-in-monitoring-effort" class="section level3">
 <h3>Historic changes in monitoring effort</h3>
 <p>As part of another <a href="https://www.datainwater.com/project/stream_pco2/">project</a>, I had downloaded monitoring data from Denmark, Sweden and Finland. During the initial data exploration I plotted the number of samples over time in order to spot potential biases and was surprised. My expectation would be a relatively constant or increasing number of samples per year which was the case for Sweden and Finland. So I set out to investigate this further in a Danish context.</p>
@@ -93,7 +92,7 @@ sample_per_year %&gt;%
   theme(legend.title = element_blank(),
         axis.text = element_text(color = &quot;black&quot;),
         legend.position = c(0.2, 0.8))</code></pre>
-<p><img src="/post/tn_tp_time/index_files/figure-html/unnamed-chunk-3-1.png" width="480" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" width="480" /></p>
 </div>
 <div id="getting-additional-data" class="section level3">
 <h3>Getting additional data</h3>
@@ -227,5 +226,5 @@ ggplot()+
         plot.margin = unit(c(0.2, 0.5, 0.2, 0.5), &quot;cm&quot;),
         axis.title.y = element_text(hjust=0.25),
         legend.position = &quot;bottom&quot;)</code></pre>
-<p><img src="/post/tn_tp_time/index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>

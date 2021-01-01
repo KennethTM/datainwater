@@ -19,9 +19,7 @@ image:
   preview_only: yes
 ---
 
-### Rain, rain and more rain
-
-2019 was a very wet year in Denmark and especially September and October were very rainy ([DR news](https://www.dr.dk/nyheder/indland/dmi-ingen-regnrekord-i-2019)). The year ended with 905.2 mm which tied the previous record from 1999. The normal amount is around 700 mm. It continued to rain in 2020 with February and already on February 23 the previous record was surpassed ([DR news](https://www.dr.dk/nyheder/indland/februar-saetter-rekord-aldrig-foer-har-vi-faaet-saa-meget-regn)). The extreme amount of water caused flooding in several parts of Denmark.
+Rain, rain and more rain - 2019 was a very wet year in Denmark and especially September and October were very rainy ([DR news](https://www.dr.dk/nyheder/indland/dmi-ingen-regnrekord-i-2019)). The year ended with 905.2 mm which tied the previous record from 1999. The normal amount is around 700 mm. It continued to rain in 2020 with February and already on February 23 the previous record was surpassed ([DR news](https://www.dr.dk/nyheder/indland/februar-saetter-rekord-aldrig-foer-har-vi-faaet-saa-meget-regn)). The extreme amount of water caused flooding in several parts of Denmark.
 
 ### Are extremes the new normal?
 

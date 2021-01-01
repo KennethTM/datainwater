@@ -23,8 +23,6 @@ image:
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
-### Wind, fetch and waves
-
 Wind traveling across water surfaces creates waves. Wave action depends on several parameters including fetch which is the unobstructed length which the wind can travel across a water surface from a given direction. Areas with high wind fetch are often exposed areas but this also depends on the primary wind direction. By calculating wind fetch, we can quantify exposure of different areas and shorelines in waterbodies. To my work, wind fetch is interesting from a physical perspective because it drives air-water gas exchange. However, it may also be interesting from an ecological viewpoint as wave exposure affects species distribution of submerged aquatic plants for example.
 
 To calculate fetch, I have used the [waver R-package](https://github.com/pmarchand1/waver) which requires a point and polygon for the calculation. However, I did not find a suitable tool when dealing with lake rasters where I wanted fetch length for each raster cell. For this kind of application, vectorizing a raster to points, calculating fetch and rasterizing the points back to a raster was slow. Tools for this exist for [ArcGIS](https://umesc.usgs.gov/management/dss/wind_fetch_wave_models_2012update.html) which was not an option. In the end I decided it to use the opportunity to do some work in Python and created a useful and extendable interface along with a command-line tool.

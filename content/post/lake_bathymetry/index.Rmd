@@ -27,8 +27,6 @@ lake_xyz <- readRDS("lake_xyz.rds")
 lake_polygon <- readRDS("lake_polygon.rds")
 ```
 
-### Bathymetric maps 
-
 Knowing the depth of in aquatic environments are of interest to many e.g. sailors in coastal waters or anglers in lakes. We can measure the depth at different geographic coordinates and use this information to produce bathymetric maps and contour lines. Often however, measurements are only obtained from relatively few points which means that interpolation is required to produce continuous and pretty maps. Higher quality maps can be produced using modern sonar and echo-sounder technology but this may also require gaps to be interpolated. Here, I focus on producing bathymetric from sparse points measurements.
 
 ### Get some data!
@@ -178,7 +176,7 @@ As showed in this example, some choices regarding interpolation method must be m
 
 ### Teaser: Interactive bathymetric interpolation using R Shiny
 
-I build two simple R Shiny web apps (hosted at https://www.shinyapps.io/) to help non-R folks perform the same interpolation. The [first app](https://kennethtm.shinyapps.io/xyz_file_converter/) is a tool for converting XYZ depth measurements in a textfile to a spatial vector point file which is required for the interpolation. This is done by uploading the file and filling out the missing fields defining text file settings and geographical coordinate system. Followingly, a ".sqlite" spatial file can be downloaded. This file, along with a polygon of the lake boundary, are then used as input for the interpolation using the [second app](https://kennethtm.shinyapps.io/lake_interpolator/). Two interpolation methods are available and resolution of the output raster is defined by the user. The resulting raster and contour-lines can then be downloaded as ".kml/.kmz" files and viewed in Google Earth.
+I build two simple R Shiny web apps (hosted at https://www.shinyapps.io/) to help non-R folks perform the same interpolation. The [first app](https://kennethtm.shinyapps.io/xyz_file_converter/) is a tool for converting XYZ depth measurements in a textfile to a spatial vector point file which is required for the interpolation. This is done by uploading the file and filling out the missing fields defining text file settings and geographical coordinate system. Afterwards, a ".sqlite" spatial file can be downloaded. This file, along with a polygon of the lake boundary, are then used as input for the interpolation using the [second app](https://kennethtm.shinyapps.io/lake_interpolator/). Two interpolation methods are available and resolution of the output raster is defined by the user. The resulting raster and contour-lines can then be downloaded as ".kml/.kmz" files and viewed in Google Earth.
 
 *Screenshot showing the second app which do the interpolation in action*
 

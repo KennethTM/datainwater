@@ -25,7 +25,7 @@ url_video: ""
 
 During the summer 2018 all fish in the southern part Filsø died suddenly ([DR news](https://www.dr.dk/nyheder/indland/hvorfor-er-80-tons-fisk-i-jyllands-naeststoerste-soe-doede)). The event occurred after a long period of drought followed by a sudden rain event. This caused a high inflow of water, and along with it, a large pulse of organic matter which rapidly increased respiration rates within the lake and caused anoxia within few days. 
 
-We have described the mechanisms and cicumstances surrounding these events in a paper published in [Science of the Total Environment](https://www.sciencedirect.com/science/article/pii/S0048969720335920). Code used for the analysis and figures are available from my [Github repository](https://github.com/KennethTM/FilsoOxygenDepletion).
+We have described the mechanisms and circumstances surrounding these events in a paper published in [Science of the Total Environment](https://www.sciencedirect.com/science/article/pii/S0048969720335920). Code used for the analysis and figures are available from my [Github repository](https://github.com/KennethTM/FilsoOxygenDepletion).
 
 ### Identifying the sources and management actions
 

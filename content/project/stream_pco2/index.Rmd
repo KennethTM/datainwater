@@ -6,7 +6,7 @@ image:
   focal_point: Smart
 links:
 slides: 
-summary: Using machine learning and GIS predict carbon dioxide in streams
+summary: Using machine learning and GIS to predict carbon dioxide in streams
 tags:
 - carbon dioxide
 - carbon budget
@@ -53,4 +53,5 @@ leaflet() %>%
   addLegend(pal = pal, values = values(stream), title = "Stream pCO2", opacity = 1)
 ```
 
-The analysis including data processing scripts and created grids will be openly available when the study gets published.
+The results of this project have been published as a research article in the [Global Biogeochemical Cycles](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2020GB006703) jorunal. The data products, and the scripts used to create them, resulting from the analysis is [openly available](https://sid.
+erda.dk/public/archives/2a69da119d14c8f29a7541a8fa901750/published‐archive.html).
