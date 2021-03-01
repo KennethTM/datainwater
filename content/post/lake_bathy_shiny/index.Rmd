@@ -25,7 +25,7 @@ output:
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
-In a [previous post](https://www.datainwater.com/post/lake_bathymetry/) I showed how to use R for creating bathymetric maps for lakes. To make this process even easier, I have created two apps using Shiny. The maps can be downloaded, opened in Google Earth on both desktop and mobile making it easy to bring along.
+In a [previous post](https://www.datainwater.com/post/lake_bathymetry/) I showed how to use R for creating bathymetric maps for lakes. To make this process even easier, I have created two apps using Shiny. The maps can be downloaded, opened in Google Earth on both desktop and mobile making it easy to bring along. Try theme out!
 
 ### Shiny for interactive data exploration
 
@@ -49,4 +49,6 @@ The second app [**LakeInterpolator**](https://kennethtm.shinyapps.io/LakeInterpo
 
 ### Notes
 
-Simple web applications that looks good by default can be created very rapidly using Shiny. I think that the simplicity is an advantage as it allows for quick development and deployment of apps that can used by everyone. An app should be good for one or a few things only do not try to overload it with functionality for both the sake of the user and developer. The apps showcased here are prototypes produce the desired output but does not handle wrongful input well yet. I might further develop them, one goal is to enable automatic download of OpenStreetMap polygon data, this way, only an input text is needed to produce nice bathymetric maps. Happy mapping!
+Simple web applications that looks good by default can be created very rapidly using Shiny. I think that the simplicity is an advantage as it allows for quick development and deployment of apps that can used by everyone. An app should be good for one or a few things only do not try to overload it with functionality for both the sake of the user and developer. 
+
+The apps showcased here are prototypes produce the desired output but does not handle wrongful input well yet. I might further develop them, one goal is to enable automatic download of OpenStreetMap polygon data, this way, only an input text is needed to produce nice bathymetric maps. Happy mapping!
