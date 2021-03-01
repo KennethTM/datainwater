@@ -1,5 +1,5 @@
 ---
-title: Bathymetric maps with R and Shiny
+title: Bathymetric maps and interpolation with R
 author: Kenneth
 date: '2020-06-10'
 categories:
@@ -172,12 +172,4 @@ bathy_df %>%
 
 ### Whats next?
 
-As showed in this example, some choices regarding interpolation method must be made which most often depend on the data. If in doubt, the simplest approach is often the most sensible. This example shows that R has good tools available for fast experimentation but for rich data-sets spanning a large geographical region other options are also available. [GDAL](https://gdal.org/) provide command-line tools to do this which is something I will show in another post. By saving the resulting maps as .kml/.kmz files they can also be viewed in Google Earth on a phone along with your current position. This is a nice feature if the maps are needed for field work or fishing. 
-
-### Teaser: Interactive bathymetric interpolation using R Shiny
-
-I build two simple R Shiny web apps (hosted at https://www.shinyapps.io/) to help non-R folks perform the same interpolation. The [first app](https://kennethtm.shinyapps.io/xyz_file_converter/) is a tool for converting XYZ depth measurements in a textfile to a spatial vector point file which is required for the interpolation. This is done by uploading the file and filling out the missing fields defining text file settings and geographical coordinate system. Afterwards, a ".sqlite" spatial file can be downloaded. This file, along with a polygon of the lake boundary, are then used as input for the interpolation using the [second app](https://kennethtm.shinyapps.io/lake_interpolator/). Two interpolation methods are available and resolution of the output raster is defined by the user. The resulting raster and contour-lines can then be downloaded as ".kml/.kmz" files and viewed in Google Earth.
-
-*Screenshot showing the second app which do the interpolation in action*
-
-![](/img/bathy_interpolate.png) 
+As showed in this example, some choices regarding interpolation method must be made which most often depend on the data. If in doubt, the simplest approach is often the most sensible. This example shows that R has good tools available for fast experimentation but for rich data-sets spanning a large geographical region other options are also available. [GDAL](https://gdal.org/) provide command-line tools to do this which is something I will show in another post. By saving the resulting maps as .kml/.kmz files they can also be viewed in Google Earth on a phone along with your current position. This is a nice feature if the maps are needed for field work or other recreative activities.

@@ -1,0 +1,52 @@
+---
+title: Shiny apps for creating lake bathymetric maps
+author: Kenneth
+date: '2021-03-01'
+categories:
+  - R
+  - GIS
+tags:
+  - aquatic environment
+  - visualization
+  - shiny
+slug: lake_shiny
+featured: no
+image: 
+  caption: ''
+  placement: ''
+  focal_point: ''
+  preview_only: yes
+output:
+  html_document:
+    code_folding: hide
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+In a [previous post](https://www.datainwater.com/post/lake_bathymetry/) I showed how to use R for creating bathymetric maps for lakes. To make this process even easier, I have created two apps using Shiny. The maps can be downloaded, opened in Google Earth on both desktop and mobile making it easy to bring along.
+
+### Shiny for interactive data exploration
+
+The R Shiny framework is a simple way to turn R analysis or pipelines into interactive web applications. Turning scripts into apps also enables non-R folks perform the same interpolation in user-friendly GUI. To solve the problem of interpolating point measurements of depth to a continuous raster surface, I have build two simple R Shiny  apps (hosted at https://www.shinyapps.io/). The workflow for creating such apps is straightforward and many tips and tricks are available from online resources.
+
+### TextToSpatial
+
+The first app [**TextToSpatial**](https://kennethtm.shinyapps.io/TextToSpatial/) creates spatial vector files from text files. The georeferenced vector files are required for interpolation but point measurements often come in the form of text files. The app supports text files in different formats, e.g. different delimiter, quoting, headers rows etc. The process is simple, upload the text file, adjust format settings, supply the EPSG code for the coordinate reference system and download the resulting file. Data can be viewed in a table, as a summary and in a interactive Leaflet map.
+
+*Screenshot of the __TextToSpatial__ app in action with georeferenced depth measurements from a text file plotted on an interactive map ([app source code](https://github.com/KennethTM/datainwater/tree/master/content/post/lake_bathy_shiny/TextToSpatial.R))*
+
+![](/img/app_text.png) 
+
+### LakeInterpolator
+
+The second app [**LakeInterpolator**](https://kennethtm.shinyapps.io/LakeInterpolator/) uses two input files: a spatial vector point and polygon file. The vector point file contains the depth data and is the output of the **TextToSpatial** app. The polygon can be retrieved from [OpenStreetMap](https://www.openstreetmap.org/) or simply drawn and exported from [Google Earth](https://www.google.com/earth/). The polygon is used as a boundary where depth is zero which improved final output. Two interpolation methods are available and resolution of the output raster is defined by the user. The resulting raster and contour-lines can then be downloaded as ".kml/.kmz" files and viewed in Google Earth. 
+
+*Screenshot of the __LakeInterpolator__ app in action with the interpolated raster surface and lake polygon shown on an interactive map ([app source code](https://github.com/KennethTM/datainwater/tree/master/content/post/lake_bathy_shiny/LakeInterpolator.R))*
+
+![](/img/app_interp.png) 
+
+### Notes
+
+Simple web applications that looks good by default can be created very rapidly using Shiny. I think that the simplicity is an advantage as it allows for quick development and deployment of apps that can used by everyone. An app should be good for one or a few things only do not try to overload it with functionality for both the sake of the user and developer. The apps showcased here are prototypes produce the desired output but does not handle wrongful input well yet. I might further develop them, one goal is to enable automatic download of OpenStreetMap polygon data, this way, only an input text is needed to produce nice bathymetric maps. Happy mapping!
