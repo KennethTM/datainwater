@@ -240,7 +240,7 @@ ggplot()+
   geom_text_repel(data = wiki_table_clean, 
                   aes(x = date_start, y = 55000, 
                       label = statsminister, col = factor(parti_1)),
-                  direction = "x", angle = 90, vjust = 0, segment.size = 0.2, 
+                  direction = "x", angle = 90, vjust = 1, segment.size = 0.2, 
                   nudge_y = 5000, show.legend = FALSE)+
   scale_fill_manual(values = party_colors, name = "Reigning political party")+
   scale_color_manual(values = party_colors)+

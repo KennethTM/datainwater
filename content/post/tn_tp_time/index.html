@@ -17,8 +17,7 @@ image:
   preview_only: yes
 ---
 
-<link href="index_files/anchor-sections/anchor-sections.css" rel="stylesheet" />
-<script src="index_files/anchor-sections/anchor-sections.js"></script>
+<script src="index_files/header-attrs/header-attrs.js"></script>
 
 
 <p>Monitoring of the aquatic environment is necessary to support proper management. The <a href="https://eng.mst.dk/">Environmental Protection Agency</a> and <a href="https://dce.au.dk/en/">Danish Centre For Environment And Energy</a> are responsible for the large scale monitoring of the aquatic environment in Denmark. This covers lakes, streams, coastal habitats and more. Recent and historic monitoring data are publicly available from the surface water database <a href="https://odaforalle.au.dk/main.aspx">ODA</a>. This is an amazing initiative which I use extensively in my research.</p>
@@ -200,7 +199,7 @@ ggplot()+
   geom_text_repel(data = wiki_table_clean, 
                   aes(x = date_start, y = 55000, 
                       label = statsminister, col = factor(parti_1)),
-                  direction = &quot;x&quot;, angle = 90, vjust = 0, segment.size = 0.2, 
+                  direction = &quot;x&quot;, angle = 90, vjust = 1, segment.size = 0.2, 
                   nudge_y = 5000, show.legend = FALSE)+
   scale_fill_manual(values = party_colors, name = &quot;Reigning political party&quot;)+
   scale_color_manual(values = party_colors)+
