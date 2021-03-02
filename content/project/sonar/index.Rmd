@@ -9,7 +9,7 @@ slides:
 summary: Developing the 'sonaR' R-package for reading and processing sonar data
 tags:
 - R
-- open-source software
+- open source software
 - GIS
 - sonar
 title: Open-source software for analyzing sonar data
