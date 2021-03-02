@@ -1,0 +1,38 @@
+---
+date: "2021-03-03"
+external_link: ""
+image: 
+  caption: Down-looking sonar image
+  focal_point: Smart
+links:
+slides: 
+summary: Developing the 'sonaR' R-package for reading and processing sonar data
+tags:
+- R
+- open-source software
+- GIS
+- sonar
+title: Open-source software for analyzing sonar data
+url_code: "https://github.com/KennethTM/sonaR"
+url_pdf: ""
+url_slides: ""
+url_video: ""
+---
+
+### A wealth of data
+
+Recreational sonars can record different kinds of data including that from down-looking sensors and side-scan systems. The down-looking sonar beam show the water column, including fish, plants etc., and can be used to characterized the sediment surface. Side-scan provides high-resolution imagery of the bottom and can quickly be used to map large areas. There is a large potential to use this data for both recreational and research purposes. However, it is often 'locked' in proprietary file formats and the user needs to purchase software to access the data. An exception to this, is the [PyHum](https://github.com/dbuscombe-usgs/PyHum) software used to process Hummingbird sonar data.
+
+### New software for analyzing sonar data
+
+To provide an open-source alternative for processing sonar data, I have initiated the development of the [sonaR](https://github.com/KennethTM/sonaR) R-package. The package is still in its infancy and subject to further development. It has three main goals: to read, visualize and analyze sonar data. At the moment, only the Lowrance '.sl2' and '.sl3' file formats are supported. These formats are proprietary but its general structure have been resolved allowing the data to be read (see also [link 1](https://github.com/hrbrmstr/arabia), [link 2](https://github.com/opensounder/sounder-log-formats), [link 3](https://github.com/opensounder/python-sllib) and [this paper](https://www.mdpi.com/2220-9964/9/3/149)). To speed things up, the reading is done using C++ through the Rcpp R-package. Once files have been read, there are many different options for analyzing the data. The goal is, that the package will include several processing options:
+
+  * Interpolation of depth and other sonar data
+  * Characterize the sediment surface 
+  * Geo-referencing side-scan images
+  * Side-scan image normalization
+
+Some of these steps can be carried out by simple image analysis techniques. However, applying machine learning techniques to this data could be exciting as one could map, detect and classify submerged macrophytes, fish or other objects below surface.
+
+![](/img/sidescan_cut.png)
+*Example of side-scan sonar image. This, and the header image have been created using the sonaR R-package*
