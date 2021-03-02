@@ -1,0 +1,28 @@
+---
+date: "2021-03-02"
+external_link: ""
+image: 
+  caption: Catchment satellite imagery - Sentinel 2
+  focal_point: Smart
+links:
+slides: 
+summary: Predicting lake and stream chemistry from catchment characteristics using machine learning
+tags:
+- machine learning
+- deep learning
+- remote sensing
+- GIS
+title: Sensing lakes and streams using machine learning
+url_code: ""
+url_pdf: ""
+url_slides: ""
+url_video: ""
+---
+
+### The catchment is important 
+
+The topographic catchment is the area delivering surface water to a lake or stream. This area can be delineated using digital elevation models. A recent [project](https://www.datainwater.com/project/stream_pco2/) showed that stream water CO~2~ could be predicted from catchment characteristics. This analysis relied on several features including average elevation and slope and land cover distribution. The use of machine learning algorithms improved the predictive accuracy.
+
+### Leveraging neural networks and satellite imagery
+
+So far, the predictive models have relied on traditional 'tabular' data that could be viewed in a normal spreadsheet. However, using the flexibility of neural networks this kind of data can be combined with image data in a single model. Image data may capture the notion of space and land cover in ways that cannot be reduced to single numbers. Freely available satellite data such as that from the Sentinel 2 satellite provide imagery at high resolution (10 m). Fusion of these data sources could improve our ability to predict general stream and lake chemistry by using modern machine learning techniques. If successful, the ability to predict surface water chemistry for new sites, lower the burden associated with manual sampling and improve management of aquatic habitats.
