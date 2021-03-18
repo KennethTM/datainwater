@@ -7,7 +7,7 @@ publication_types: ["2"]
 abstract: ""
 featured: false
 publication: "*Hydrobiologia*"
-url_pdf: ""
+url_pdf: "https://github.com/KennethTM/datainwater/tree/master/content/publication/martinsen-2019-stratify/ponds_watertemperature.pdf"
 doi: "10.1007/s10750-018-3737-2"
 ---
 

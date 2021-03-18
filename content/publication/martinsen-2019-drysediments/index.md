@@ -7,7 +7,7 @@ publication_types: ["2"]
 abstract: ""
 featured: false
 publication: "*Biogeochemistry*"
-url_pdf: ""
+url_pdf: "https://github.com/KennethTM/datainwater/tree/master/content/publication/martinsen-2019-drysediments/drysed.pdf"
 doi: "10.1007/s10533-019-00579-0"
 ---
 
